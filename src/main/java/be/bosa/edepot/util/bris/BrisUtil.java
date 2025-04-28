@@ -1,10 +1,10 @@
 package be.bosa.edepot.util.bris;
 
-import jakarta.activation.DataHandler;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
+import javax.activation.DataHandler;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import lombok.NoArgsConstructor;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;

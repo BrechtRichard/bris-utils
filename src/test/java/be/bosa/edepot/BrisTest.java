@@ -5,7 +5,7 @@ import be.bosa.edepot.util.bris.BrisUtil;
 import be.bosa.edepot.util.bris.BrisXsdValidator;
 import be.bosa.edepot.util.bris.SampleObjectFactory;
 import eu.europa.ec.bris.jaxb.br.generic.notification.template.crossborder.disclosure.merger.v4_0.CrossBorderMergerDisclosureNotificationTemplate;
-import jakarta.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBContext;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

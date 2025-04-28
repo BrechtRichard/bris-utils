@@ -6,8 +6,8 @@ import be.belgium.fsb.edepot_v3.prsu120.Prsu120;
 import be.belgium.fsb.edepot_v3.prsu500c.Prsu500C;
 import be.belgium.fsb.edepot_v3.prsu500u.Prsu500U;
 import eu.europa.ec.bris.jaxb.br.generic.notification.template.crossborder.disclosure.merger.v4_0.CrossBorderMergerDisclosureNotificationTemplate;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 /**
  * Utility class that return static JAXB-related instances that are thread-safe.
