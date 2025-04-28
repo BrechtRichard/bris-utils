@@ -108,7 +108,7 @@ public class BrisTest {
                 "prsu100u"
         );
 
-        String xml = BrisUtil.marshalAsElementToString(obj, Prsu100U.class, qName, jaxbContext);
+        String xml = BrisUtil.marshalToString(obj, jaxbContext);
         assertNotNull(xml);
     }
 
