@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://fednot.be/2023/08/08/lta/anna/sip"
+           xmlns="http://fednot.be/2023/08/08/lta/anna/sip"
+           xmlns:common="http://fednot.be/2023/08/08/lta/anna/common">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            The common base data structures for the different ANNA SIP (Submission
+            Information Package) types.
+            
+            History of changes:
+            - 08/08/2023 : updated namespaces
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:import namespace="http://fednot.be/2023/08/08/lta/anna/common"
+               schemaLocation="CommonTypes.xsd" />
+
+    <xs:complexType name="sipDocumentBase" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                The base type for a document.  This is refined for each SIP with a specific enumeration
+                for the supported document types within that SIP.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="oid" type="common:oid">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The oid is the standardized (IANA) unique identifier of the document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="mimetype" type="common:string100">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The mime type of the document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="extension" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The file name extension to be used for this document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="content" type="xs:base64Binary">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The file context, encoded as a BASE64 string.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="potentialExpirationDate" type="xs:date" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Optional expiration date of the document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sendToSearch" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Used to indicate whether this document is metadata that needs to be processed
+                        by ANNA search.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="sipBase" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                The base type for a SIP.  This is refined for each SIP because of the specific document
+                types that can be included and different constraints on the cardinality of the documents.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ltapId" type="common:string50" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The unique identifier of an LTA (Long Term Archive) package.  This is optional:
+                        if the identifier is already known when creating the SIP, it can be added. It
+                        is used for extra validation: consistency between this identifier and the unique
+                        identifier of the act.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="actUniqueId" type="common:string50">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The unique identifier of an act on the client (eGreffe, eDepot) side.  This is
+                        required and is determined client side.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

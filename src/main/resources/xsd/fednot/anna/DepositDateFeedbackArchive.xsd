@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://fednot.be/2023/08/08/lta/anna/depositDateFeedbackArchive"
+           xmlns="http://fednot.be/2023/08/08/lta/anna/depositDateFeedbackArchive"
+           xmlns:common="http://fednot.be/2023/08/08/lta/anna/common">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Archive used to describe the deposit date.  This archive xml is used internally in the context of an
+            Enterprise Modification.  In case of an Enterprise Modification, the deposit date is filled in by Fednot and
+            is the date when the Enterprise Modification SIP is ingested in LTA Core.  This archive xml is generated
+            by LTA Core and stored in object storage, linked to the Enterprise Modification SIP.  It is used to keep
+            track of the deposit date that was given for the Enterprise Modification: the data stored in LTA Core must
+            be sufficient to rebuild ANNA search from scratch.
+            
+            History of changes:
+            - 08/08/2023 : updated namespaces
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:import namespace="http://fednot.be/2023/08/08/lta/anna/common"
+               schemaLocation="CommonTypes.xsd" />
+
+    <xs:element name="depositDateFeedbackArchive">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Xml document containing the deposit date and some metadata.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="referenceXsdOid" type="common:oid" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            All versions of the xsd schemas that were used at some point in LTA Core and in ANNA search
+                            are given an oid and are stored long term.  This element refers to the oid of the xsd schema
+                            that was used to construct this DepositDateFeedbackArchive.
+
+                            The element is optional, but it is highly recommended to fill it in.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="receivalDate" type="xs:date">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The date when the Enterprise Modification SIP was received in LTA Core.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="receivalTime" type="xs:time">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The time when the Enterprise Modification SIP was received in LTA Core.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="depositDate" type="xs:date">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The date when the act is deposited: the date when the Enterprise Modification SIP was
+                            ingested in LTA Core.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

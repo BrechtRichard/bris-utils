@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://fednot.be/2023/08/08/lta/anna/enterpriseCreationDepositArchive"
+           xmlns="http://fednot.be/2023/08/08/lta/anna/enterpriseCreationDepositArchive"
+           xmlns:eda="http://fednot.be/2023/08/08/lta/anna/enterpriseDepositArchive"
+           xmlns:common="http://fednot.be/2023/08/08/lta/anna/common">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Archive that contains all metadata related to an Enterprise Creation Deposit.
+
+            History of changes:
+            - 08/08/2023 : updated namespaces + added the juridicalDistrictDivision
+            - 08/05/2023 : updated namespaces
+            - 02/03/2025 : juridicalDistrictType mandatory
+            - 25/01/2023 : updated namespaces + added juridical district needed for company deeds search.
+            - 23/01/2023 : initial version.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:import namespace="http://fednot.be/2023/08/08/lta/anna/enterpriseDepositArchive"
+               schemaLocation="EnterpriseDepositArchive.xsd"/>
+
+    <xs:import namespace="http://fednot.be/2023/08/08/lta/anna/common"
+               schemaLocation="CommonTypes.xsd" />
+
+    <xs:complexType name="denomination">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                The full set of denominations (social, abbreviated, commercial) for a company in a given language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="eda:localized">
+                <xs:sequence>
+                    <xs:element name="socialName" type="common:string255">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The social name in the given language.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="abbreviatedName" type="common:string255" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The abbreviated name in the given language. Optional.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="commercialName" type="common:string255" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The commercial name in the given language. Optional.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="euid">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type to represent a European Unique Identifier (EUID), used to identify companies and their branches
+                in the European Union.  This is used in the context of foreign enterprises with Belgian branches.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="countryCode" type="eda:countryCodeType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The country in the form of a 2-letter ISO code.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="registryId" type="common:string255">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Identifier of the company register.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="registrationNumber" type="common:string255">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The registration number of the company.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="foreignEnterpriseIdentification">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Describes identification of a foreign enterprise.  This is used in the context of a foreign enterprise
+                with Belgian branches.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="foreignLegalForm" type="common:string255" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The (foreign) legal form of the foreign enterprise.  This is plain text.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="euid" type="euid" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The EUID of the foreign enterprise.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="belgianBranchName">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Describes the name of the Belgian branch of a foreign enterprise.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="languageCode" type="eda:enterpriseDepositLanguage">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The language of the branch name.  A branch can have a name translated in multiple languages.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="name" type="common:string255" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The name of the branch in the specified language.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="abbreviatedName" type="common:string50" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The abbreviated name of the branch in the specified language.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="belgianBranch">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Describes a Belgian branch of a foreign enterprise.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="beginDate" type="xs:date" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The date when the branch became active.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="mainBranch" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Indicates whether this is the main branch of the enterprise.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="localAddress" type="eda:belgianAddress">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The local Belgian address of a Belgian branch.  Note that this is required and is used as the
+                        identification of a Belgian branch.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="branchName" type="belgianBranchName" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The name of the Belgian branch.  This is a translated element and can be specified for multiple
+                        languages.  A branch name must be given for each publication language.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="belgianBranchWithCreationTimestamp">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Belgian branch to be created.
+                Contains an optional creation timestamp after creation at CBE.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="belgianBranch">
+                <xs:sequence>
+                    <xs:element name="creationTimestamp" type="xs:dateTime" minOccurs="0" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="enterpriseCreationDepositArchive">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Xml document containing all metadata in the context of an Enterprise Creation Deposit.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="eda:enterpriseDepositArchive">
+                    <xs:sequence>
+                        <xs:element name="legalLanguage" type="eda:enterpriseDepositLanguage">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The legal language of the company that is created.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="juridicalDistrict" type="eda:juridicalDistrictType" minOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The juridical district where the deed will be deposited.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="juridicalDistrictDivision" type="eda:juridicalDistrictDivisionType" minOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The juridical district division where the deed will be deposited.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="prsu100CGenerationDate" type="xs:dateTime">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Timestamp indicating when the Prsu100C was generated.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="actObjectCode" type="eda:actObjectCode" default="001">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The act object code for the request.  In this context (Enterprise Creation Deposit),
+                                    this must always be code "001".
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="legalFormCode" type="eda:legalFormCode">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The Belgian legal form code for the enterprise (or Belgian branches) to be created.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="financialData" type="eda:financialData">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Description of the financial data of the enterprise.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:choice>
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The head office address of the enterprise.  In the case of a new Belgian enterprise,
+                                    this is a Belgian address.  In the case of new Belgian branches of a foreign
+                                    enterprise, this is the head office address of the foreign enterprise and ia a
+                                    foreign address.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:element name="headOfficeAddress" type="eda:belgianAddress">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        A Belgian head office address.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="foreignHeadOfficeAddress" type="eda:foreignAddress">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        A foreign head office address.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:choice>
+
+                        <xs:element name="email" type="common:string255" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The optional statutory email address of the enterprise.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="website" type="common:string255" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The optional statutory website address of the enterprise.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="denomination" type="denomination" maxOccurs="3">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The full set of denominations (social, abbreviated, commercial) of the enterprise,
+                                    specified in a given language.  The denominations should be specified for each
+                                    publication language.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="personFunction" type="eda:personFunction" minOccurs="0" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Functions within the company that are assigned to persons (physical persons or moral
+                                    parties).  This element is specified for each assigned function within the company.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="foreignEnterpriseIdentification" type="foreignEnterpriseIdentification" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Identification of a foreign enterprise.  Only relevant in the context of the
+                                    creation of Belgian branches.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                        <xs:element name="existingBelgianBranch" type="belgianBranch" minOccurs="0" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Describes an existing Belgian branch of a foreign enterprise.  This element is
+                                    specified for each existing Belgian branch.  Only relevant in the context of the
+                                    creation of Belgian branches.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="belgianBranchToCreate" type="belgianBranchWithCreationTimestamp" minOccurs="0" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Describes a Belgian branch that is to be created in the context of the act.  This
+                                    element is specified for each Belgian branch that is to be created.  Only relevant
+                                    in the context of the creation of Belgian branches.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

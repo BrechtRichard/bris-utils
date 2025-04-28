@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:prsu120="http://fsb.belgium.be/edepot-v3/prsu120"
+           xmlns:not="http://fsb.belgium.be/edepot-v3/notary"
+           xmlns:cit="http://fsb.belgium.be/edepot-v3/citizen"
+           xmlns:acc="http://fsb.belgium.be/edepot-v3/accountant"
+           xmlns:ack="http://fsb.belgium.be/edepot-v3/acknowledgement"
+           xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+           xmlns:err="http://fsb.belgium.be/edepot-v3/error"
+           xmlns:sub="http://fsb.belgium.be/edepot-v3/submittal"
+           xmlns:upd="http://fsb.belgium.be/edepot-v3/update"
+           xmlns:ver="http://fsb.belgium.be/edepot-v3/version"
+           targetNamespace="http://fsb.belgium.be/edepot-v3/prsu120"
+           xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema version: 3.5 Date: 2025-04-10 Author: Rudy Tedaldi - Crossborder Mobility (disclosure + attest)
+			Schema version: 3.4 Date: 2024-09-30 Author: Fabrice Warlet - Add of 3 new steps for official contact
+            changes.
+            Schema version: 3.3 Date: 2024-09-02 Author: Rudy Tedaldi/Philippe Delvaux - Onboarded 'Accountants'.
+            Schema version: 3.2 Date: 2024-01-31 Author: Philippe Delvaux - Add of prsu100_idempotencykey field.
+            Schema version: 3.1 Date: 2022-11-28 Author: Davy Toch - Updated for phase 3.
+            Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of
+            edepot-v2.
+            Schema version: 2.3 Date: 2021-06 Author: Rudy Tedaldi (BOSA) Change : added belgian_branch creation data to
+            the PRSU120
+            Schema version: 2.1 Date: 2019-03-11 Author: Davy Toch (BOSA) Change : added UPDATE_KBO_OFFICIAL_CONTACT and
+            official_contact_change structure in PRSU120
+            Schema version: 2 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+            Schema version: 1.0 RC1 Date: 2005-04-07 Author: Ignaz Wanders
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/notary" schemaLocation="common/notary.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/accountant" schemaLocation="common/accountant.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/citizen" schemaLocation="common/citizen.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/acknowledgement" schemaLocation="common/acknowledgement.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="common/enterprise.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/error" schemaLocation="common/error.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/submittal" schemaLocation="common/submittal.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/update" schemaLocation="common/update.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/version" schemaLocation="common/version.xsd"/>
+<xs:annotation>
+		<xs:documentation xml:lang="en">
+		  Schema version: 4.0 Crossborder Mobility (BRIS schema)
+		</xs:documentation>
+	</xs:annotation>	
+
+    <xs:simpleType name="acknowledgementTemplateTypeEnum">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CrossBorderMergerDisclosureAcknowledgementTemplateBase64"/>
+          <xs:enumeration value="CrossBorderDivisionDisclosureAcknowledgementTemplateBase64"/>
+          <xs:enumeration value="CrossBorderConversionDisclosureAcknowledgementTemplateBase64"/>
+          <xs:enumeration value="CrossBorderMergerPreOperationCertificateAcknowledgementTemplateBase64"/>
+          <xs:enumeration value="CrossBorderDivisionPreOperationCertificateAcknowledgementTemplateBase64"/>
+          <xs:enumeration value="CrossBorderConversionPreOperationCertificateAcknowledgementTemplateBase64"/>
+          <xs:enumeration value="BusinessErrorBase64"/>
+        </xs:restriction>
+    </xs:simpleType>    
+    
+    <xs:complexType name="crossborder_mobility_ack" xmime:expectedContentTypes="application/octet-stream">
+        <xs:simpleContent>
+            <xs:extension base="xs:base64Binary">
+                <xs:attribute name="acknowledgementTemplateType" use="required" type="prsu120:acknowledgementTemplateTypeEnum"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="step">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">possible values for the steps. V2.3: CREATE_BRANCH step added
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="FEDNOT_DEPOSIT"/>
+            <xs:enumeration value="MONITOR_PUBLICATION"/>
+            <xs:enumeration value="FEDNOT_PUBLICATION"/>
+            <xs:enumeration value="CBE_CREATE_ENTERPRISE"/>
+            <xs:enumeration value="CBE_CREATE_FUNCTION"/>
+            <xs:enumeration value="CBE_CREATE_BRANCH"/>
+            <xs:enumeration value="CBE_ACTIVATE"/>
+            <xs:enumeration value="CBE_CHANGE_JURIDICAL_FORM"/>
+            <xs:enumeration value="CBE_CANCEL_NAME"/>
+            <xs:enumeration value="CBE_CORRECT_NAME"/>
+            <xs:enumeration value="CBE_STOP_NAME"/>
+            <xs:enumeration value="CBE_NEW_NAME"/>
+            <xs:enumeration value="CBE_CORRECT_OFFICIAL_ADDRESS"/>
+            <xs:enumeration value="CBE_NEW_OFFICIAL_ADDRESS"/>
+            <xs:enumeration value="CBE_CORRECT_BRANCH_LOCAL_ADDRESS"/>
+            <xs:enumeration value="CBE_NEW_BRANCH_LOCAL_ADDRESS"/>
+            <xs:enumeration value="CBE_DURATION_CHANGE"/>
+            <xs:enumeration value="CBE_CAPITAL_CHANGE"/>
+            <xs:enumeration value="CBE_FINANCIAL_DATE_CHANGE"/>
+            <xs:enumeration value="CBE_DISSOLUTION"/>
+            <xs:enumeration value="CBE_STOP_FUNCTION"/>
+            <xs:enumeration value="CBE_CORRECT_FUNCTION"/>
+            <xs:enumeration value="CBE_CANCEL_FUNCTION"/>
+            <xs:enumeration value="CBE_NEW_FUNCTION"/>
+            <xs:enumeration value="CBE_OFFICIAL_CONTACT"/>
+            <xs:enumeration value="CBE_CREATE_OFFICIAL_CONTACT"/>
+            <xs:enumeration value="CBE_UPDATE_OFFICIAL_CONTACT"/>
+            <xs:enumeration value="CBE_STOP_OFFICIAL_CONTACT"/>
+			<xs:enumeration value="CBE_CROSSBORDER"/>
+            <!-- SIP2 -->
+            <!-- SIP3 -->
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="steps">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Name identifying the step the flow is in/has been in.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="step" type="prsu120:step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="workflow">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">V2.3: eDepot Workflow</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CREATE"/>
+            <xs:enumeration value="UPDATE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="prsu120">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                The PRSU-120 message. This message is sent by the FSB to the notaries, whenever a significant event has
+                happened in the FSB. The FSB will queue the PRSU-120 messages, and the notaries
+                can retrieve them through a special web service operation.
+
+                Possible significant events are the following. - successful creation of an enterprise in the KBO/BCE.
+                This results in a PRSU-120 message which contains the enterprise number of the
+                newly created enterprise. - successful publication of the abstracts. This finalizes the complete PRSU-C
+                process and provides the publication data of the abstracts to the notaries. When
+                this message has arrived, there will be no subsequent messages for this process. - an unrecoverable
+                error has occurred. Any error that has occurred which terminates or suspends the
+                process is reported to the notary. o If termination occurred, this is due to either a client error such
+                as erroneous data, or a severe server error which caused the process to
+                terminate. # a client error is a normal completion from the point of view of the server. No updates have
+                been made in any back-end system, and the notary should resubmit the act with
+                corrected data. # a server error should never occur. If it occurs anyway, the FSB system administrator
+                should be contacted for a recovery procedure. o If suspension occurred, this is
+                due to some back-end system failing after any back-end system had been updated already, and a rollback
+                is not possible. The FSB system administrator is notified automatically, and
+                generally a manual intervention is required, after which the process may be resumed.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="messageId" type="xs:string"/>
+                <xs:element ref="ver:version" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">V2.3: Message version copied from PRSU100. This element is
+                            filled from message version 2.3. It can be used by the client application to dispatch the
+                            PRSU120 message to a specific application
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="workflow" type="prsu120:workflow" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">V3.0: now required.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="prsu100_idempotencykey" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Idempotencykey of the initial PRSU100C/PRSU100U message.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:choice>
+                    <xs:element ref="not:notary"/>
+                    <xs:element ref="cit:citizen"/>
+                    <xs:element ref="acc:accountant"/>
+                </xs:choice>
+                <xs:element ref="sub:submittal_timestamp" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="sub:act_date" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="sub:act_effectivity_date" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="sub:act_nature"/>
+                <xs:element ref="sub:act_uid"/>
+                <xs:element name="acknowledgement" type="ack:acknowledgement"/>
+                <xs:choice>
+                    <xs:sequence>
+                        <xs:element name="enterprise_num" type="ent:enterprise_number"/>
+                        <xs:element name="belgian_branches" type="ent:belgian_branches_with_kbo_status" minOccurs="0"
+                                    maxOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">V2.3: Defines a sequence (array) of new belgian
+                                    branche(s) created (incl. KBO status). It is optional.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element ref="sub:deposit"/>
+                    </xs:sequence>
+                    <xs:element ref="sub:publication" maxOccurs="unbounded"/>
+                    <xs:element name="update_date" type="xs:dateTime" maxOccurs="1"/>
+					<xs:element name="crossborder_mobility_ack" type="prsu120:crossborder_mobility_ack" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">V3.5: Crossborder Mobility Directive EU 2019/2021. Currently implemented: crossborder Merger/Division/Conversion disclosure and certificate acknowledgement</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+                    <xs:element ref="err:error"/>
+                </xs:choice>
+                <xs:element name="flowTerminated" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="prsu120:steps" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="update_status" type="upd:update" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

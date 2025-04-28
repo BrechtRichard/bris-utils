@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CrossBorderMergerDisclosureNotificationTemplate
+        xmlns="http://ec.europa.eu/bris/v4_0/br/CrossBorderMergerDisclosureNotificationTemplate"
+        xmlns:bbc="http://ec.europa.eu/bris/v1_4/common/BasicComponents"
+        xmlns:bacad="http://ec.europa.eu/bris/v1_5/common/AggregateComponents/Addresses"
+        xmlns:baccbnt="http://ec.europa.eu/bris/v4_0/br/CrossBorderNotificationTemplate"
+        xmlns:baccbcd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderCompanyData"
+        xmlns:baccbdpcd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderDisclosureProposedCompanyData"
+        xmlns:baccbscd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderSimplifiedCompanyData">
+
+    <!-- Notification template base fields -->
+    <bbc:NotificationDateTime>2025-01-01T12:00:00.000Z</bbc:NotificationDateTime>
+    <bbc:IssuanceDateTime>2025-01-01T12:00:00.000Z</bbc:IssuanceDateTime>
+    <baccbnt:IssuingOrganisation>
+        <bbc:BusinessRegisterCode>BR-001</bbc:BusinessRegisterCode>
+        <bbc:LocalisedBusinessRegisterName>Example Business Register</bbc:LocalisedBusinessRegisterName>
+        <bbc:BusinessRegisterCountry>BE</bbc:BusinessRegisterCountry>
+    </baccbnt:IssuingOrganisation>
+
+    <!-- Existing company data (to be converted) -->
+    <baccbcd:CrossBorderCompanyData>
+        <baccbscd:Names>
+            <bbc:QualifiedCompanyName qualifierValue="main" languageID="en" languageLocaleID="ID123">Old Company Name Ltd</bbc:QualifiedCompanyName>
+        </baccbscd:Names>
+        <bacad:RegisteredOffice>
+            <bbc:PostalCode>1000</bbc:PostalCode>           <!-- Optional, but first -->
+            <bbc:City>Amsterdam</bbc:City>                  <!-- Optional -->
+            <bbc:AddressLine1>Sloterweg 100</bbc:AddressLine1>  <!-- Optional -->
+            <!-- <bbc:AddressLine2>...</bbc:AddressLine2> -->
+            <!-- <bbc:AddressLine3>...</bbc:AddressLine3> -->
+            <bbc:Country>NL</bbc:Country>                   <!-- Required, last -->
+        </bacad:RegisteredOffice>
+        <bbc:LegalFormCode>OLD_CODE_1</bbc:LegalFormCode>
+        <bbc:CompanyRegistrationNumber>12345678</bbc:CompanyRegistrationNumber>
+        <bbc:CompanyEUID>BEOLD1234.001234</bbc:CompanyEUID>
+        <bbc:RegisterDescription>Old Business Register Description</bbc:RegisterDescription>
+    </baccbcd:CrossBorderCompanyData>
+
+    <!-- Proposed new company data -->
+    <ProposedCompanyData xmlns="http://ec.europa.eu/bris/v4_0/br/CrossBorderMergerDisclosureNotificationTemplate"
+                         xmlns:bbc="http://ec.europa.eu/bris/v1_4/common/BasicComponents"
+                         xmlns:bacad="http://ec.europa.eu/bris/v1_5/common/AggregateComponents/Addresses"
+                         xmlns:baccbscd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderSimplifiedCompanyData"
+                         xmlns:baccbdpcd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderDisclosureProposedCompanyData"
+                         xmlns:baccbacd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderAdditionalCompanyData"
+                         xmlns:bacci="http://ec.europa.eu/bris/v1_5/common/AggregateComponents/CompanyItem">
+
+        <baccbscd:Names>
+            <bbc:QualifiedCompanyName qualifierValue="main" languageID="en" languageLocaleID="ID123">New Company Name Ltd</bbc:QualifiedCompanyName>
+        </baccbscd:Names>
+
+        <bacad:RegisteredOffice>
+            <bbc:PostalCode>1000</bbc:PostalCode>           <!-- Optional, but first -->
+            <bbc:City>Amsterdam</bbc:City>                  <!-- Optional -->
+            <bbc:AddressLine1>Sloterweg 100</bbc:AddressLine1>  <!-- Optional -->
+            <!-- <bbc:AddressLine2>...</bbc:AddressLine2> -->
+            <!-- <bbc:AddressLine3>...</bbc:AddressLine3> -->
+            <bbc:Country>NL</bbc:Country>                   <!-- Required, last -->
+        </bacad:RegisteredOffice>
+
+        <bbc:LegalFormCode>NL-LTD-001</bbc:LegalFormCode>
+
+        <baccbdpcd:AdditionalCompanyData xmlns:bbc="http://ec.europa.eu/bris/v1_4/common/BasicComponents"
+                                         xmlns:baccbacd="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderAdditionalCompanyData">
+            <baccbacd:DraftTermsDocument>
+                <bacci:CompanyItem>
+                    <bbc:CompanyItemExplanatoryLabel name="label">AS01</bbc:CompanyItemExplanatoryLabel>
+                </bacci:CompanyItem>
+                <bbc:DocumentID>ID123</bbc:DocumentID>
+                <bbc:DocumentFormat>PDF</bbc:DocumentFormat>
+                <bbc:DocumentLanguageCode>en</bbc:DocumentLanguageCode>
+                <bbc:DocumentFee currencyID="EUR">
+                    45.00
+                </bbc:DocumentFee>
+
+
+                <bbc:DocumentPublicationDate>2025-01-01</bbc:DocumentPublicationDate>
+                <bbc:DocumentPurchasable>true</bbc:DocumentPurchasable>
+                <bbc:DocumentImmediateDelivery>true</bbc:DocumentImmediateDelivery>
+            </baccbacd:DraftTermsDocument>
+
+            <baccbacd:Notice>
+                <baccbacd:CompanyNameCarryingCrossBorderOperation>New Company Name Ltd</baccbacd:CompanyNameCarryingCrossBorderOperation>
+                <baccbacd:DeadlineForComments>2025-06-01</baccbacd:DeadlineForComments>
+                <baccbacd:Document>
+                    <bacci:CompanyItem>
+                        <bbc:CompanyItemExplanatoryLabel name="label">AS01</bbc:CompanyItemExplanatoryLabel>
+                    </bacci:CompanyItem>
+                    <bbc:DocumentID>DOC123</bbc:DocumentID>
+                    <bbc:DocumentFormat>PDF</bbc:DocumentFormat>
+                    <bbc:DocumentLanguageCode>en</bbc:DocumentLanguageCode>
+                    <bbc:DocumentFee currencyID="EUR">
+                        45.00
+                    </bbc:DocumentFee>
+                    <bbc:DocumentPublicationDate>2025-01-01</bbc:DocumentPublicationDate>
+                    <bbc:DocumentPurchasable>true</bbc:DocumentPurchasable>
+                    <bbc:DocumentImmediateDelivery>true</bbc:DocumentImmediateDelivery>
+                </baccbacd:Document>
+
+            </baccbacd:Notice>
+        </baccbdpcd:AdditionalCompanyData>
+    </ProposedCompanyData>
+</CrossBorderMergerDisclosureNotificationTemplate>

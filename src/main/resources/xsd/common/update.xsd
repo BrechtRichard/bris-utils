@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by David Coppens (Sopra Banking Software) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:upd="http://fsb.belgium.be/edepot-v3/update"
+    xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+    xmlns:adr="http://fsb.belgium.be/edepot-v3/address"
+    xmlns:par="http://fsb.belgium.be/edepot-v3/parameter"
+    xmlns:xmime="http://www.w3.org/2005/05/xmlmime" targetNamespace="http://fsb.belgium.be/edepot-v3/update" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema version: 3.5 Date: 2025-03-19 Author: Rudy Tedaldi - Adding Crossborder Mobility (BRIS schema) to
+            update element
+            Schema version: 3.3 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of
+            edepot-v2.
+            Schema version: 3.2 Date: 2019-03-11 Author : BOSA (Davy Toch) Change : typo in documentation contactType
+            (003 = website, 004 = email)
+            Schema version: 3.1 Date: 2019-03-10 Author : BOSA (Davy Toch) Change : official_contact_change added
+            Schema version: 3.0 Date: 2014-06-26 Author: Rudy Tedaldi (Correct address allows to correct an existing
+            address where all fields are optional)
+            Schema version: 2.0 Date: 2012-07-20 Author: Rudy Tedaldi (New Update, including correction)
+            Schema version: 1.1 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/person" schemaLocation="person.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/notary" schemaLocation="notary.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="enterprise.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/submittal" schemaLocation="submittal.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/address" schemaLocation="address.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/parameter" schemaLocation="parameter.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema version: 3.5 Crossborder Mobility (BRIS schema)
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:simpleType name="NotificationTemplateTypeEnum">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CrossBorderMergerDisclosureNotificationTemplateBase64"/>
+          <xs:enumeration value="CrossBorderDivisionDisclosureNotificationTemplateBase64"/>
+          <xs:enumeration value="CrossBorderConversionDisclosureNotificationTemplateBase64"/>
+          <xs:enumeration value="CrossBorderMergerPreOperationCertificateNotificationTemplateBase64"/>
+          <xs:enumeration value="CrossBorderDivisionPreOperationCertificateNotificationTemplateBase64"/>
+          <xs:enumeration value="CrossBorderConversionPreOperationCertificateNotificationTemplateBase64"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="crossborder_mobility" xmime:expectedContentTypes="application/octet-stream">
+        <xs:simpleContent>
+            <xs:extension base="xs:base64Binary">
+                <xs:attribute name="notificationTemplateType" use="required" type="upd:NotificationTemplateTypeEnum"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="update">
+        <xs:sequence>
+            <xs:element ref="ent:juridical_district" minOccurs="0"/>
+            <xs:element name="juridical_form_change" type="upd:juridical_form_change" minOccurs="0"/>
+            <xs:element name="name_change" type="upd:name_change" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        eDepot V2 : An enterprise name (social, commercial or abbreviation) can be added, canceled,
+                        stopped, updated or corrected.
+                        V3.2: Info communicated to KBO. Each name is in KBO language (fr, nl, de, en, xx)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <!-- eDepot V2 Address change groups official address change &  local address change-->
+            <xs:element name="address_change" type="upd:address_change" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        eDepot V2 : An address (social or local) can be stopped or updated
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="correct_financial_data" type="upd:correct_financial_data" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        eDepot Phase 3 : Wrong financial Data (capital, financial date and duration) can be corrected
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="duration_change" type="upd:duration_change" minOccurs="0"/>
+            <xs:element name="capital_change" type="upd:capital_change" minOccurs="0"/>
+            <!-- eDepot V2 Financial Date change groups social exercise and general assembly (as KBO) -->
+            <xs:element name="financial_date_change" type="upd:financial_date_change" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        eDepot V2 : Financial Date (general assembly or fiscal exercise dates) can be updated
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="official_contact_change" type="upd:official_contact_change" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">eDepot V2 CSA2019 RFC : Official contact data (web site and/or email
+                        address) can be corrected, updated, canceled, stopped, created.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="dissolution" type="upd:dissolution" minOccurs="0" maxOccurs="2">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <!--
+      eDepot-v2 : Bank Account removed from eDepot
+      <xs:element name="bank_account_change" type="upd:bank_account_change" minOccurs="0" />
+      <xs:element name="new_bank_account" type="upd:new_bank_account" minOccurs="0" maxOccurs="1" />
+-->
+            <xs:element name="mandates_change" type="upd:mandates_change" minOccurs="0"/>
+
+            <xs:element name="crossborder_mobility" type="upd:crossborder_mobility" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">V3.5: Crossborder Mobility Directive EU 2019/2021. Currently
+                        implemented: crossborder Merger/Division/Conversion disclosure and certificate
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="monitor_status" type="par:monitor_status" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="juridical_form_change">
+        <xs:sequence>
+            <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="date" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        eDepot V2 : The new juridical form will replace the existing one at the date specified.
+                        The date must be at least greater than the start date of the existing juridical form.
+                        Correction of juridical form not included in eDepot V2 scope
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="new_juridical_form" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The new juridical form (KBO code)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- eDepot V2 new "Name Change" structure -->
+    <xs:complexType name="name_change">
+        <xs:sequence>
+            <xs:element name="cancel_name" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 : An enterprise name (commercial or abbreviation) can be canceled in one
+                                language as if it never existed. The social name cannot be canceled.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="language_code" type="par:kbo_language_code"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:choice>
+                            <xs:element ref="ent:commercial_name"/>
+                            <xs:element ref="ent:abbreviation_name"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="correct_name" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 - PHASE 2: An enterprise name (social, commercial or abbreviation) can be
+                                corrected in one language as if it was wrongly originally encoded. Date should be the
+                                orginial date of the data (from KBO).
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="cur_name" type="ent:cur_name"/>
+                        <xs:element name="new_name" type="ent:new_name"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="new_name_for_correction" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                V3.2 DISCONTINUED - KBO names languages are not Publication languages
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="language_code" type="par:nat_language_code"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:choice>
+                            <xs:element ref="ent:social_name"/>
+                            <xs:element ref="ent:commercial_name"/>
+                            <xs:element ref="ent:abbreviation_name"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="stop_name" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 : An enterprise name (social, commercial or abbreviation) can be stopped in
+                                one language. Date must be > than the date of the existing enterprise name
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="language_code" type="par:kbo_language_code" minOccurs="1"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:choice>
+                            <xs:element ref="ent:social_name"/>
+                            <xs:element ref="ent:commercial_name"/>
+                            <xs:element ref="ent:abbreviation_name"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="new_name" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 : An enterprise name (social, commercial or abbreviation) can be changed in
+                                one language.
+                                The new enterprise name must have a creation date > than the date of the existing
+                                enterprise name.
+                                The existing name will be automatically stopped at KBO at date -1 day
+                                V3.2 : New name can be added in KBO language (fr, nl, de, en, xx)
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="language_code" type="par:kbo_language_code"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:choice>
+                            <xs:element ref="ent:social_name"/>
+                            <xs:element ref="ent:commercial_name"/>
+                            <xs:element ref="ent:abbreviation_name"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- eDepot V2 -
+    <xs:complexType name="bank_account_change">
+        <xs:sequence>
+            <xs:element name="cur_iban" type="iso:iban" minOccurs="0" />
+            <xs:element name="new_iban" type="iso:iban" minOccurs="0" />
+
+            <xs:element name="cur_bic" type="iso:bic" minOccurs="0" />
+            <xs:element name="new_bic" type="iso:bic" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="new_bank_account">
+        <xs:sequence>
+            <xs:element name="new_iban" type="iso:iban" minOccurs="0" />
+
+            <xs:element name="new_bic" type="iso:bic" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+-->
+    <!-- eDepot V2 -
+    <xs:complexType name="official_address_change">
+        <xs:sequence>
+            <xs:element name="new_official_address" type="adr:addressType" />
+        </xs:sequence>
+    </xs:complexType>
+-->
+    <!-- eDepot V2 new "Address Change" structure -->
+    <xs:complexType name="address_change">
+        <xs:sequence>
+            <xs:element name="correct_official_address" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 Phase 2 : An official address can be corrected if it was wrongly originally
+                                encoded. V3: The date is by default the orginial date (from KBO) but can be corrected
+                                with a new date (date must be greater or equal to the enterprise begin date)
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="cur_date" type="xs:date"/>
+                        <xs:element name="cur_official_address" type="adr:addressOptionalType"/>
+                        <xs:element name="new_date" type="xs:date"/>
+                        <xs:element name="new_official_address" type="adr:addressType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="new_official_address" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 : Official address change. Date must be > the existing address date. The
+                                existing address will be automatically stopped by KBO at date - 1day
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:element name="official_address" type="adr:addressType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="correct_belgian_branch_local_address" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 Phas 3 : An Belgian branch local address of a foreign company can be corrected
+                                if it was wrongly originally encoded. Date should be the orginial date (from KBO).
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="cur_date" type="xs:date"/>
+                        <xs:element name="cur_belgian_branch_local_address" type="adr:addressOptionalType"/>
+                        <xs:element name="new_date" type="xs:date"/>
+                        <xs:element name="new_belgian_branch_local_address" type="adr:addressType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="new_belgian_branch_local_address" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 phase 3 : Belgian branch (of a foreign company) local address. ATTENTION: This
+                                message is only used to create the first local address.
+                                The message "update_belgian_branch_local_address" will be used later to update this
+                                address if needed
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:element name="belgian_branch_local_address" type="adr:belgian-addressType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="update_belgian_branch_local_address" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 phase 3 : Update Belgian branch (of a foreign company) local address.
+                                Date must be > the existing address date. The existing local address will be
+                                automatically stopped by KBO at date - 1day
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="date" type="xs:date"/>
+                        <xs:element name="belgian_branch_local_address" type="adr:belgian-addressType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="duration_change">
+        <xs:sequence>
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    eDepot V2 : Duration update at a specific date
+                </xs:documentation>
+            </xs:annotation>
+            <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="cur_duration" type="xs:integer" nillable="true"/>
+            <xs:element name="new_duration" type="xs:integer" nillable="true"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="capital_change">
+        <xs:sequence>
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    eDepot V2 : Capital update at a specific date
+                </xs:documentation>
+            </xs:annotation>
+            <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="cur_amount" type="ent:amount"/>
+            <xs:element name="cur_currency" type="ent:currency"/>
+            <xs:element name="new_amount" type="ent:amount"/>
+            <xs:element name="new_currency" type="ent:currency"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="financial_date_change">
+        <xs:sequence>
+            <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="cur_exercise_end" type="ent:exercise_end" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="new_exercise_end" type="ent:exercise_end"/>
+            <xs:element name="cur_begin_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="new_begin_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="cur_end_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="new_end_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="cur_assembly_place" type="xs:string" minOccurs="0"/>
+            <xs:element name="new_assembly_place" type="xs:string" minOccurs="0"/>
+            <xs:element name="cur_assembly_date" type="ent:assembly_daymonth" minOccurs="0"/>
+            <xs:element name="new_assembly_date" type="ent:assembly_daymonth" minOccurs="0"/>
+            <xs:element name="cur_assembly_time" type="ent:assembly_time" minOccurs="0"/>
+            <xs:element name="new_assembly_time" type="ent:assembly_time" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="correct_financial_data">
+        <xs:sequence>
+            <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="cur_date" type="xs:date"/>
+            <xs:element name="new_date" type="xs:date" minOccurs="0"/>
+            <xs:element name="cur_capital_amount" type="ent:amount" minOccurs="0"/>
+            <xs:element name="new_capital_amount" type="ent:amount" minOccurs="0"/>
+            <xs:element name="cur_currency" type="ent:currency" minOccurs="0"/>
+            <xs:element name="new_currency" type="ent:currency" minOccurs="0"/>
+            <xs:element name="cur_duration" type="xs:integer" nillable="true" minOccurs="0"/>
+            <xs:element name="new_duration" type="xs:integer" nillable="true" minOccurs="0"/>
+            <xs:element name="cur_exercise_end" type="ent:exercise_end" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="new_exercise_end" type="ent:exercise_end"/>
+            <xs:element name="cur_begin_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="new_begin_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="cur_end_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="new_end_exceptional_exercise_date" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="cur_assembly_date" type="ent:assembly_daymonth" minOccurs="0"/>
+            <xs:element name="new_assembly_date" type="ent:assembly_daymonth" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dissolution">
+        <xs:sequence>
+            <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dissolution_date" type="xs:date"/>
+            <xs:element name="dissolution_reason_code" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="mandates_change">
+        <xs:sequence>
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    eDepot V2 : First list all existing functions, then either cancel, stop a function or correct it
+                    (upd_mandate) and finally add the new ones (new_mandate)
+                    PHASE 2 : add new_mandate_for_correction element
+                </xs:documentation>
+            </xs:annotation>
+            <!-- eDepot V2 - New mandate change complex type -->
+            <xs:element name="existing_mandate" type="ent:function" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="new_mandate_for_correction" type="ent:new_function" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="upd_mandate" type="ent:update_function" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="new_mandate" type="ent:new_function" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- om justitie boodschappen niet te moeten aanpassen -->
+    <xs:complexType name="updatejustice">
+        <xs:sequence>
+            <xs:element ref="ent:juridical_district" minOccurs="0"/>
+            <xs:element name="juridical_form_change" type="upd:juridical_form_change_jus" minOccurs="0"/>
+            <xs:element name="name_change" type="upd:name_change_jus" minOccurs="0"/>
+            <xs:element name="official_address_change" type="upd:official_address_change_jus" minOccurs="0"/>
+            <!--			<xs:element name="local_address_change" type="upd:local_address_change_jus" minOccurs="0"/>
+                        <xs:element name="dissolution" type="upd:dissolution_jus" minOccurs="0" maxOccurs="2"/>
+                        -->
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="juridical_form_change_jus">
+        <xs:sequence>
+            <xs:element name="new_juridical_form" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="name_change_jus">
+        <xs:sequence>
+            <xs:element name="new_name" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="language_code" type="par:nat_language_code"/>
+                        <xs:element name="social_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="commercial_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="abbreviation_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="official_address_change_jus">
+        <xs:sequence>
+            <xs:element name="new_official_address" type="adr:addressType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="local_address_change_jus">
+        <xs:sequence>
+            <xs:element name="new_local_address" type="adr:addressType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dissolution_jus">
+        <xs:sequence>
+            <xs:element name="dissolution_date" type="xs:date"/>
+            <xs:element name="dissolution_reason_code" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- eDepot V2 CSA2019 RFC "Official Contact Change" structure -->
+    <xs:complexType name="official_contact_change">
+        <xs:sequence>
+            <xs:element name="cancel_official_contact" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 CSA2019 RFC: An enterprise official contact (email or site web) can be
+                                canceled if it was created by mistake and never existed.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="original_contact" type="ent:originalOfficialContactType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="stop_official_contact" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 CSA2019 RFC: An enterprise official contact (email or site web) can be stopped
+                                at end date.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="end_date" type="xs:date">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">The stop date of the contact.</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="original_contact" type="ent:originalOfficialContactType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="correct_official_contact" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 CSA2019 RFC: An enterprise official contact (email or site web) can be correct
+                                if it was wrongly encoded originally.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="original_contact" type="ent:originalOfficialContactType"/>
+                        <xs:element name="begin_date" type="xs:date" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">The corrected begin date (optional).</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="end_date" type="xs:date" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">The corrected or new end date (optional).
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="contactValue" type="xs:string" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">The corrected value (optional) (email address or web
+                                    site).
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="new_official_contact" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 CSA2019 RFC: One and max. 1 one enterprise official contact (email or site
+                                web) can be added by deed.
+                                In total max. 1 official email and max. 1 official web site will be accepted in KBO.
+                                Attention : this funcion
+                                is only used to create the contact data for the first time.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="date" type="xs:date">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">The creation date. That date must be greater or equal to
+                                    the enterprise creation date.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="contactType" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">Contact Type (mandatory). Possible value defined by KBO
+                                    : 003 (web site) or 004 (email)
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="contactValue" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">Contact Value (mandatory) : email OR web site
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="update_official_contact" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                eDepot V2 CSA2019 RFC: An official web site or an official email has been created. It
+                                can be updated using this element.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="original_contact" type="ent:originalOfficialContactType"/>
+                        <xs:element name="begin_date" type="xs:date">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    The begin date of the new contactValue (mandatory).
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="contactValue" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">The new Contact Value (mandatory) : email OR web site
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

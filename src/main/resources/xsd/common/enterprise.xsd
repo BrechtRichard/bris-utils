@@ -1,0 +1,991 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+		   xmlns:iso="http://fsb.belgium.be/edepot-v3/common/isocodes"
+		   xmlns:adr="http://fsb.belgium.be/edepot-v3/address" xmlns:per="http://fsb.belgium.be/edepot-v3/person"
+		   xmlns:par="http://fsb.belgium.be/edepot-v3/parameter"
+		   targetNamespace="http://fsb.belgium.be/edepot-v3/enterprise" elementFormDefault="qualified"
+		   attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Schema version: 3.2 Date: 2024-10-02 Author : BOSA (Philippe Delvaux), Change: fix stop_code regex: allow
+			only 3-digits
+			Schema version: 3.1 Date: 2024-05-17 Author : BOSA (Mathieu Steenput), Change: first_name optional
+			Schema version: 3.0 Date: 2022-09-22 Author: BOSA (Davy Toch), Change: Target namespace now edepot-v3
+			instead of edepot-v2.
+			Schema version: 2.3 Date: 2021-06-28 Author : BOSA (Rudy Tedaldi), Change: Belgian Branch of foreign
+			enterprise
+			Schema version: 1.6 Date: 2019-03-11 Author : BOSA (Davy Toch), Change: typo in documentation contactType
+			(003 = web site, 004 = email)
+			Schema version: 1.5 Date: 2019-03-10 Author : BOSA (Davy Toch), Change: new type
+			ent:originalOfficialContactType added
+			Schema version: 1.4 Date: 2019-03-01 Author : BOSA (Davy Toch), Change: new type ent:officialContactType
+			added
+			Schema version: 1.3 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+			Schema version: 1.2 added an optional field enterprise number to the functions in case a person represents
+			an enterprise. The schema is backwards compatible.
+			Schema version: 1.1 Date: 2005-07-26 Author: Ignaz Wanders
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/address" schemaLocation="address.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/person" schemaLocation="person.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/parameter" schemaLocation="parameter.xsd"/>
+	<xs:simpleType name="CbeEntityNumber">
+		<xs:annotation>
+			<xs:documentation>
+				Crossroad Bank of Enterprise number, used to identify an
+				unique enterprise or businessUnit. It is composed by 10
+				digits (the first one could be avoided if equal to 0). A
+				0 on the first of the 10 digits reprensents an
+				enterprise and a 2 represents a business unit.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:long"/>
+	</xs:simpleType>
+	<xs:simpleType name="enterprise_number">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The type definition of the number of an enterprise. It is based on a string to avoid problems with
+				leading zeroes.
+
+				Validation rules: - The length is 10 digits, of which the last two are control digits. - The first digit
+				is either a zero or a one. - Let num1 = number(0:8) and num2 = number(8:10) -
+				Then num2 = 97 - (num1 % 97)
+
+				The modulus can not be captured in a regular expression, but the basic check on the digits and the
+				length are used in a regular expression to validate the enterprise number.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[01]\d{9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="contactType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Contact information for an enterprise consists of an e-mail address, a phone number, and a fax number.
+				This format is based on the KBO properties within an "address".
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="fax-number" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">An optional facsimile number for the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="phone-number" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">An optional phone number for the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="email" type="adr:emailType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">An optional e-mail address for the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="officialContactType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Official contact information of the enterprise consists of 0 to 2 data: max. 1 official email address
+				and max. 1 official web site.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="contactType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Contact Type (mandatory). Possible value defined by KBO : 003 (web
+						site) or 004 (email)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="contactValue" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Contact Value (mandatory) : email OR web site</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="originalOfficialContactType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				eDepot V2 CSA2019 RFC : When communicating a change to an official contact, then the information from
+				officialContactType must be communicated as well as some additional information.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="contactType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Contact Type (mandatory). Possible value defined by KBO : 003 (web
+						site) or 004 (email)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="contactValue" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Contact Value (mandatory) : email OR web site</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="contactBeginDate" type="xs:date"/>
+			<xs:element name="contactEndDate" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="juridical_district">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The enterprise's juridical district,including a code and a description.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<!-- V3.0 Jusitical_district_code definition is updated to allow to store the code of the juridical district -->
+				<xs:element name="code" type="ent:juridical_district_code" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">juridical district code. Ex: MONS, ANTWERPEN, BRUXELLES-FR,
+							BRUSSEL-NL
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="description" type="xs:string" minOccurs="0"/>
+				<xs:element name="language_code" type="par:nat_language_code" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">language code of the legal district.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="juridical_form">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The enterprise's juridical form, as defined using KBO/BCE codes. The codes are three-digit codes, and
+				language independent. Examples: 014 = SA (fr) or NV (nl) 015 = SPRL (fr) or BVBA
+				(nl)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="\d{3}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="foreign_juridical_form" type="xs:string"/>
+
+	<xs:element name="financial_contribution">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The nature of the financial contribution in cash (amount and currency).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="cash_contribution" type="ent:cash_contribution" minOccurs="0"/>
+				<xs:element name="nature_contribution" type="ent:nature_contribution" minOccurs="0"/>
+				<xs:element name="enterprise_contribution" type="ent:enterprise_contribution" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="cash_contribution">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The nature of the financial contribution in cash (amount and currency).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="amount" type="ent:amount"/>
+			<xs:element name="currency" type="ent:currency"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="nature_contribution">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The nature of the financial contribution in amount of the nature
+				contribution (amount and currency).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="amount" type="ent:amount"/>
+			<xs:element name="currency" type="ent:currency"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="enterprise_contribution">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The nature of the financial contribution in amount of the enterprise
+				contribution (amount and currency).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="amount" type="ent:amount"/>
+			<xs:element name="currency" type="ent:currency"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="amount">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The amount should be accompanied by a currency.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:minInclusive value="0"/>
+			<xs:totalDigits value="15"/>
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="currency">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The currency of an amount.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{2}|[A-Z]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="capital">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="amount" type="ent:amount"/>
+				<xs:element name="currency" type="ent:currency"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="duration" type="xs:positiveInteger">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The duration of... (?), expressed in years</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:element name="name" type="ent:name">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				V3.2 (retrocompatible) Existing name, abbreviation and commercial names communicated in national
+				language,
+				as it has been published in Belgian Monitor, before any change.
+				At least one social name in one national language is mandatory.
+				Cannot have a commercial name or an abbreviation in one language if no social name in that language
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!-- eDepot V2 Social_name, Commercial_name & Abbreviation_name are independant elements -->
+	<xs:element name="social_name" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The name of the enterprise. Corresponds to the code 001 in the KBO/BCE.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="commercial_name" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The commercial name of the enterprise. Corresponds to the code 002 in the KBO/BCE.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="abbreviation_name" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The abbreviation of the enterprise. Corresponds to the code 003 in the KBO/BCE.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="name">
+		<xs:sequence>
+			<xs:element name="language_code" type="par:nat_language_code">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The language of the enterprise name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="social_name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the enterprise. Corresponds to the code 001 in the
+						KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="commercial_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The commercial name of the enterprise. Corresponds to the code 002
+						in the KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="abbreviation_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The abbreviation of the enterprise. Corresponds to the code 003 in
+						the KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="name_after_change" type="ent:name_after_change">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				V3.2 This element is communicated only if a name, an abbreviation or a commercial name has been changed
+				If no name change, the name_after_change element is NOT communicated.
+
+				When the element is present, all names - after change - must be communicated.
+				New names are communicated in national language, as communicated to the Belgian Monitor.
+				Attention, an existing name that is not communicated in one national language after change is considered
+				as a name stopped !
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="name_after_change">
+		<xs:sequence>
+			<xs:element name="language_code" type="par:nat_language_code">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The language of the enterprise name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="social_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the enterprise. Corresponds to the code 001 in the
+						KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="commercial_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The commercial name of the enterprise. Corresponds to the code 002
+						in the KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="abbreviation_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The abbreviation of the enterprise. Corresponds to the code 003 in
+						the KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- V2.3 optional belgian branch name and abbreviation -->
+	<xs:complexType name="belgian_branch_name">
+		<xs:sequence>
+			<xs:element name="language_code" type="par:nat_language_code">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The language of the enterprise name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="branch_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optional name of the belgian branch. Must be different from the
+						foreign enterprise name. Corresponds to the code 004 in the KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="abbreviation_name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optional abbreviation of the belgian branch. Corresponds to the code
+						002 in the KBO/BCE.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- V2.3 Belgian branch -->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">V2.3: A belgian branch is identified by his mandatory belgian address +
+			optionally a name and an abbreviation
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="belgian_branch">
+		<xs:sequence>
+			<xs:element name="begin_date" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Begin date of the belgian branch. Optional field that can be given
+						to set a start date in the future
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="main_branch" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">This indicator is true only for the belgian branch that determines
+						the juridical district where the documents are saved. Else it is false or empty
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="local_address" type="adr:belgian-addressType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						V2.3: Local address of the belgian branch of a foreign enterprise. Mandatory for each branch
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="name" type="ent:belgian_branch_name" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optional name(s) of the belgian branch of a foreign enterprise.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- V2.3 Belgian branches -->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Defines a sequence (array) of belgian_branches. It can be optional.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="belgian_branches">
+		<xs:sequence>
+			<xs:element name="belgian_branch" type="ent:belgian_branch" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: a foreign enterprise could open multiple Belgian branches in
+						the same deed
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- V2.3 Belgian branch created with KBO status -->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">V2.3: A belgian branch is identified by his mandatory belgian address +
+			optionally a name and an abbreviation
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="belgian_branch_with_kbo_status">
+		<xs:sequence>
+			<xs:element name="begin_date" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Begin date of the belgian branch. Optional field that can be given
+						to set a start date in the future
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="main_branch" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">This indicator is true only for the belgian branch that determines
+						the juridical district where the documents are saved. Else it is false or empty
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="local_address" type="adr:belgian-addressType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						V2.3: Local address of the belgian branch of a foreign enterprise. Mandatory for each branch
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="name" type="ent:belgian_branch_name" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optional name(s) of the belgian branch of a foreign enterprise.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="entity_number" type="ent:CbeEntityNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Belgian branch KBO internal entity number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="creation_timestamp" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Belgian branch - KBO creation date and time</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- V2.3 Belgian branch(es) created with KBO status -->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Defines a sequence (array) of belgian_branch(es) created with kbo status. It can
+			be optional.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="belgian_branches_with_kbo_status">
+		<xs:sequence>
+			<xs:element name="belgian_branch_with_kbo_status" type="ent:belgian_branch_with_kbo_status" minOccurs="1"
+						maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: a foreign enterprise can open multiple Belgian branches in the
+						same deed
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- V2.3 EUID -->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">V2.3: EUID is a unique identifier of a European company within EU. It is defined
+			by BRIS - Interconnected Business Registers of EU Member States. The EUID-code consists of the state code,
+			the company registry identification number and the registration number of the company.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="EUID">
+		<xs:sequence>
+			<xs:element name="country_code" type="iso:country">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Country code (ex: FR, NL, ...)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="registry_id" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Company register identifier (ex: KBOBCE in Belgium, 0101, 0202, ...
+						in France, ...)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="registration_number" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Company registration number in his country = enterprise number (in
+						Belgium)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- eDepot V2 PHASE 2 Correct Name - Current State (using kbo language) -->
+	<xs:complexType name="cur_name">
+		<xs:sequence>
+			<xs:element name="language_code" type="par:kbo_language_code"/>
+			<xs:element name="date" type="xs:date" minOccurs="0"/>
+			<xs:choice>
+				<xs:element ref="ent:social_name"/>
+				<xs:element ref="ent:commercial_name"/>
+				<xs:element ref="ent:abbreviation_name"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- eDepot V2 PHASE 2 Correct Name - New State (V3.2: using kbo language) -->
+	<xs:complexType name="new_name">
+		<xs:sequence>
+			<xs:element name="language_code" type="par:kbo_language_code"/>
+			<xs:element name="date" type="xs:date" minOccurs="0"/>
+			<xs:choice>
+				<xs:element ref="ent:social_name"/>
+				<xs:element ref="ent:commercial_name"/>
+				<xs:element ref="ent:abbreviation_name"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="day" type="ent:day"/>
+	<xs:element name="year">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The year, including century indication.
+
+				Only years between 1800 and 2199 are accepted. These boundaries are set arbitrarily and are only used to
+				check for accidental major typos.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:positiveInteger">
+				<xs:minInclusive value="1800"/>
+				<xs:maxInclusive value="2199"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="exercise_end" type="ent:exercise_end"/>
+	<xs:element name="begin_exceptional_exercise" type="xs:date">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The begin date of the exceptional exercise.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="end_exceptional_exercise" type="xs:date">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The end date of the exceptional exercise.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="assembly_date" type="ent:assembly_month"/>
+	<xs:element name="function" type="ent:function">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">People or enterprises can be registered with an enterprise having a certain
+				function.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:element name="powerOfRepresentationClauses" type="ent:powerOfRepresentationClauses">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Power of representation (POR) are clauses linked to 1 or more function roles
+				and 1 or more POR Types, starting at a date
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="clause_scope">
+		<xs:sequence>
+			<xs:element name="clause_type" type="ent:clause_type">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Clause type, see FedNot Doc. ex: COLLEGIAL, GENERIC_UNIQUE,
+						GENERIC_DOUBLE, NOMINATIVE_UNIQUE, ...
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="function_code" type="ent:function_code">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Relative to a KBO function code: 10002 (administrator), 10006
+						(manager), 10004 (day-to-day management delegate)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="por_content">
+		<xs:sequence>
+			<xs:element name="language" type="par:doc_language_code" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The language code or language codes combination of the content of
+						the power of representation
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="content" type="xs:string" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Ex: The legal person is validly represented vis-à-vis third parties
+						and in court by each director acting individually and by...
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="powerOfRepresentationClauses">
+		<xs:sequence>
+
+			<xs:element name="scopes" type="ent:clause_scope" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="contents" type="ent:por_content" minOccurs="1" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Either a multilingual content or a content in one or more national
+						language codes
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="dt_begin" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The start date of the validity of the power of representation.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="dt_end" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The end date of the validity of power of representation
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="function">
+		<xs:sequence>
+			<xs:element name="code" type="ent:function_code"/>
+			<xs:element name="dt_begin" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The start date of the validity of the function.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="dt_end" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The end date of the validity of the function. This field is optional. If the field is given, a
+						corresponding stop code must be provided.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stop_code" type="ent:stop_code" minOccurs="0"/>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The function can be held by either a person, or another enterprise
+					</xs:documentation>
+				</xs:annotation>
+				<xs:element name="person">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This element is used when the function is held by a person
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<!-- eDepot V2 : if function is held by a person, then person_num is a mandatory field -->
+							<xs:element name="person_num" type="per:person_num" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The national registry number or the bis registry
+										number of the person.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="first_name" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The first name of the person.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="last_name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The last name of the person.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="enterprise_num" type="ent:enterprise_number" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The enterprise number if the person represents a
+										company.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="enterprise">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This element is used when the function is held by an
+							enterprise
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<!-- eDepot V2 : if function is held by an enterprise, then enterprise_num is a mandatory field -->
+							<xs:element name="enterprise_num" type="ent:enterprise_number" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The enterprise number.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="social_name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The name of the enterprise.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<!--eDepot V2 : New new_function complex type -->
+	<xs:complexType name="new_function">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">New function</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Only existing function can be canceled, stopped or corrected
+				</xs:documentation>
+			</xs:annotation>
+			<xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="new_function" type="ent:function"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--eDepot V2 : New update_function complex type -->
+	<xs:complexType name="update_function">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Update function --> for an existing function: either cancel it, stop it or
+				correct data
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Only existing function can be canceled, stopped or corrected
+				</xs:documentation>
+			</xs:annotation>
+			<xs:element name="kbo_status" type="par:kbo_status" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="exist_function" type="ent:function"/>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Either cancel, stop or correct the function</xs:documentation>
+				</xs:annotation>
+				<xs:element name="cancel_function" type="ent:cancel_function"/>
+				<xs:element name="stop_function" type="ent:stop_function"/>
+				<xs:element name="correct_function" type="ent:function"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="cancel_function">
+		<xs:sequence>
+			<xs:element name="code" type="ent:function_code"/>
+			<xs:element name="dt_begin" type="xs:date" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The end date of the validity of the function.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The function can be held by either a person, or another enterprise
+					</xs:documentation>
+				</xs:annotation>
+				<xs:element name="person" type="per:person_num">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This element is used when the function is held by a person
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="enterprise" type="ent:enterprise_number">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This element is used when the function is held by an
+							enterprise
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="stop_function">
+		<xs:sequence>
+			<xs:element name="code" type="ent:function_code"/>
+			<xs:element name="dt_end" type="xs:date" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The end date of the validity of the function.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stop_code" type="ent:stop_code" minOccurs="1" maxOccurs="1"/>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The function can be held by either a person, or another enterprise
+					</xs:documentation>
+				</xs:annotation>
+				<xs:element name="person" type="per:person_num">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This element is used when the function is held by a person
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="enterprise" type="ent:enterprise_number">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This element is used when the function is held by an
+							enterprise
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="stop_financial_records_flag">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:element name="annual_assembly">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The annual assembly.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="assembly_place" type="xs:string" minOccurs="0"/>
+				<xs:element name="assembly_date" type="ent:assembly_daymonth" minOccurs="0"/>
+				<xs:element name="assembly_time" type="ent:assembly_time" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="assembly_daymonth">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The annual assembly date.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="day" type="ent:day" minOccurs="0"/>
+			<xs:element name="month" type="ent:month"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="assembly_time">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The annual assembly time.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="hour" type="ent:hour"/>
+			<xs:element name="minute" type="ent:minute"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="hour">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This field must be between 0 and 23.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="23"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="minute">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This field must be between 0 and 59.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="59"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="assembly_month">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The annual assembly should take place in a certain month of the year. The day within the month is not
+				required. The year is not required. If the day and/or year are provided, there is
+				no validation that it is a valid date. Thus 30th February 2005 is accepted by the schema.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="month" type="ent:month"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="exercise_end">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The end of the accounting year is the same for each year: only day and month required. There is no
+				validation that the day within that month is a valid date. Thus 30th February is
+				accepted by the schema.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="day" type="ent:day"/>
+			<xs:element name="month" type="ent:month"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="month">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The month of a year. This field must be between 1 and 12.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:positiveInteger">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="day">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The day of a month. This field must be between 1 and 31.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="31"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="stop_code">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The stop code for a function is mandatory if an end date is given. the stop code defines the reason for
+				ending the function. Stop codes are a three-digit code
+				Example stop codes are: 003, 004, 005, 010, ...
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="function_code">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The code of the function.
+
+				Function codes are five digits long, and identified as "quality" within a function. Examples are: 00001
+				Founder (Fondateur/Oprichter) 10002 Administrator (Administrateur/Bestuurder)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{5}"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="clause_type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Type of POR clause
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"></xs:restriction>
+	</xs:simpleType>
+
+	<!--V3.0: Juridical district code definition and restriction changed -->
+	<xs:simpleType name="juridical_district_code">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The juridical district code. Ex: EUPEN, MONS, BRUXELLES_FR, ...
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"></xs:restriction>
+	</xs:simpleType>
+</xs:schema>

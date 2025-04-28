@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://fednot.be/2023/08/08/lta/anna/common"
+           xmlns="http://fednot.be/2023/08/08/lta/anna/common">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            The common data structures used in the different ANNA xsd schemas.
+
+            History of changes:
+            - 08/08/2023 : updated bceNumber with a pattern (10 digits)
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:simpleType name="string10">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                String restricted to length 10.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="10" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="string20">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                String restricted to length 20.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="20" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="string50">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                String restricted to length 50.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="string100">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                String restricted to length 100.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="100" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="string255">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                String restricted to length 255.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="255" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="officeId">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                An officeId is restricted to 6 characters.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="oid">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A document OID is a string restricted to 255 characters.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="255" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="bceNumber">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A BCE number of a company.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-1]\d{9}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

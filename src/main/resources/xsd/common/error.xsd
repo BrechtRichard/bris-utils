@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:err="http://fsb.belgium.be/edepot-v3/error"
+	targetNamespace="http://fsb.belgium.be/edepot-v3/error" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+       Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2.
+       Schema version: 1.0 RC3 Date: 2007-08-22 Author: Tom Michiels
+    </xs:documentation>
+	</xs:annotation>
+
+
+	<xs:element name="errors">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="err:error" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="error">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Definition of an error which occurred during the process and needs to be communicated to the notaries.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="process_id" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The unique process ID of the process instance running on the FSB in which the error occurred. This is not friendly for humans, but allows administrators (less human?) to
+							locate the process instance.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="process_name" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The name of the process instance running on the FSB in which the error occurred. This is human readable. It is not sufficient to locate the process instance, but aides in
+							finding it.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="id" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The unique ID of the error is based on the timestamp when it occurred. this ID can be used to correlate the error message with possible entries in a log file.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="severity" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The severity level of the error. It is restricted to a number of preset possibilities.
+
+							severity description 1 A back-end system is temporarily unavailable. Automatic retries will occur. No further client action is required. 2 A recoverable error has occurred.
+							This may induce a delay in processing. No further client action is required. 3 A severe error has occurred, which terminates the process.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="error_code" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							A possible error code. Generally this can be the class name of the exception, if the exception occurred within the FSB, but it may also contain an error code which
+							originated from a back-end system.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="error_message" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The error message. This is human-friendly text which should indicate what type of error has occurred.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="error_stacktrace" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The stack trace of the error message. This is absolutely not human friendly, and in a production environment will not normally be given, except when debugging or monitoring
+							requires so. The purpose of this element is mainly to aide during testing.
+
+							This field is optional.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

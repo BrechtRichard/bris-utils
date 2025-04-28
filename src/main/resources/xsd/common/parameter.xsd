@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:par="http://fsb.belgium.be/edepot-v3/parameter" targetNamespace="http://fsb.belgium.be/edepot-v3/parameter" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+  <xs:annotation>
+    <xs:documentation xml:lang="en">
+      Schema version: 3.2 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2.
+      Schema version: 3.1 Date: 2012-12-27 Author: Rudy Tedaldi
+      The Parameter element is set by the client application. It can interact with the workflow
+      Ex: The same message can be called in :
+      - "prevalidation" mode : The messages will be validated by SPF Justice backend. 
+        If "deposit_mode" is false, a positive or negative prevalidation message is returned to the client and the process is stopped
+        If "deposit_mode" is true, the process continues (enterprise update + deposit)
+      - "deposit" mode : The deposit will be processed normally by the SPF Justice 
+      Either "prevalidation" mode or "deposit_mode" must be at least true 
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:element name="input_parameter">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Input parameter influencing eDepot workflow. Either prevalidation_mode or deposit_mode must at least be true</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="prevalidation_mode" type="xs:boolean" default="true">
+          <xs:annotation>
+            <xs:documentation xml:lang="en">
+              True(default): eDepot must be prevalidated by SPF Justice. False: no prevalidation done
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="deposit_mode" type="xs:boolean" minOccurs="1" default="true">
+          <xs:annotation>
+            <xs:documentation xml:lang="en">
+              True(default): Normal eDepot. False: workflow stops after prevalidation and returns prevalidation status
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="kbo_status">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Last Kbo call status : either ok (date and time) or in error (error code + date and time)</xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="successfull_process_date_time" type="xs:dateTime" />
+      <xs:element name="error" type="par:backend_error" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="justice_status">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Last Justice deposit status : either ok (date and time) or in error (error code + date and time)</xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="successfull_process_date_time" type="xs:dateTime" />
+      <xs:element name="error" type="par:backend_error" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="monitor_status">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Last Belgian Monitor call status : either ok (date and time) or in error (error code + date and time)</xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="successfull_process_date_time" type="xs:dateTime" />
+      <xs:element name="error" type="par:backend_error" />
+    </xs:choice>
+  </xs:complexType>
+  
+  <xs:complexType name="backend_error">
+    <xs:sequence>
+      <xs:element name="error_code" type="xs:string" />
+      <xs:element name="error_description" type="xs:string" />
+      <xs:element name="error_date_time" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="kbo_language_code">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">KBO language code could be: fr, nl, de, en, xx </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:language" />
+  </xs:simpleType>
+  <xs:simpleType name="nat_language_code">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Only 3 values available for national language: fr, nl, de</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:language" />
+  </xs:simpleType>
+	<xs:simpleType name="doc_language_code">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Language code or language codes combinations for deed or a statute document: 5 values currently available: fr, nl, de, frnl, frde</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:language" />
+	</xs:simpleType>
+  <xs:simpleType name="kbo_answer_language_code">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">KBO answer language code. Only 2 values accepted today: fr, nl</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:language" />
+  </xs:simpleType>
+  </xs:schema>

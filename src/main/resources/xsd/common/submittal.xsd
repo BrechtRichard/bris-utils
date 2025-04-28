@@ -1,0 +1,523 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by David Coppens (Sopra Banking Software) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sub="http://fsb.belgium.be/edepot-v3/submittal" xmlns:adr="http://fsb.belgium.be/edepot-v3/address" xmlns:iso="http://fsb.belgium.be/edepot-v3/common/isocodes" xmlns:par="http://fsb.belgium.be/edepot-v3/parameter" xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise" targetNamespace="http://fsb.belgium.be/edepot-v3/submittal" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Schema version: 3.1 Date: 2022-11-28 Author: Davy Toch - Added act_nature and act_uid.
+			Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2.
+			Schema version: 2.3 Date: 2020-06-30 Author: Rudy Tedaldi. Create belgian branch of a foreign enterprise. Add VAT incl indocator to billing structure 
+			Schema version: 1.3 Date: 2020-02-25 Author: Davy Toch. Changes since previous version : annex_date made optional.
+			Schema version: 1.2 Date: 2019-07-01 Author: Davy Toch. Changes since previous version : sub_annex added.
+			Schema version: 1.1 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+			Schema version: 1.0 RC4 Date: 2005-05-24 Author: Ignaz Wanders
+			Phase 2 update : par:nat_language replaces iso:language
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/parameter" schemaLocation="parameter.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/address" schemaLocation="address.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="enterprise.xsd"/>
+	<xs:element name="submittal_timestamp" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The timestamp of submittal, as set by the notary.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="act_purpose">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="act_purpose" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="act_date" type="xs:date">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The date of the act, as set by the notary.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="act_effectivity_date" type="xs:date">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The date the act will become effective, as set by the notary.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="act_nature">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">AUTHENTIC or PRIVATE. An authentic deed is always sent by a notary. A private deed is mainly sent by a citizen, but can also be sent by a notary</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="AUTHENTIC"/>
+				<xs:enumeration value="PRIVATE"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="act_uid" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Act Unique id (used by Fednot ingestion api)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="pages" type="sub:pages"/>
+	<xs:element name="image" type="xs:base64Binary">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The image must be base 64 encoded. It should be a PDF, but this is not checked for.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="md5sum" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The md5sum od the binary image. This allows to check that the binary image was not changed since the generation of the md5sum. It does not allow for a detailed check of the contents of
+				the binary image.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="abstractPathName" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Path Name of the abstract PDF file on the file system
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:element name="image_type" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The type of the image.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="sub_abstract">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				V3.0 Abstracts have been previously uploaded to FedNot (ANNA). This element defines the UID of the document and the token received by ANNA. These data will be sent to the Belgian Monitor later for being retrieved from ANNA and being published.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:pages">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The number of pages of the abstract.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="language_code" type="par:nat_language_code">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The language of the abstract.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="template_language_code" type="par:nat_language_code" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Language code of the model of the extract (1 code per extract sent)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="oid" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Unique document id generated by eGreffe/FedNot</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="abstractFile">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				V2.3: Belgian Monitor internal communication from API to background app.
+				Abstract are prepared on the file system for an SFTP communication
+				The path name of the abstract is communicated to the Belgian Monitor
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:pages">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The number of pages of the abstract.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="language_code" type="par:nat_language_code">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The language of the abstract.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="template_language_code" type="par:nat_language_code" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Language code of the model of the extract (1 code per extract sent)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:abstractPathName">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The path name of the abstract on the file system. It will be used to get this file in SFTP</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>	
+	
+	<xs:element name="sub_annex">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Element definition of an annex and related metadata. Max. one annex is sent per message.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="annex_type" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Type of annex as defined by eDa (mandatory metadata). For instance : Revisor report, general assembly meeting report. Recommended to predefine a list of type codes.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="annex_date" type="xs:date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Date of annex (mandatory metadata).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="annex_language" type="par:nat_language_code" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Language of the annex is optional. If filled, it must be a national language code.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="annex_author" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Author of the annex (optional free-text annex metadata).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="annex_description" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Description of the annex (optional free-text annex metadata).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:image">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The image of the abstract.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="doc">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="doc_id" type="sub:UUIDType" minOccurs="1" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Unique id of the annex document.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="sha256" type="xs:hexBinary" minOccurs="1" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>The sha256 checksum of the document.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+  <xs:simpleType name="UUIDType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"> </xs:pattern>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  
+	<xs:element name="sub_coordinated_statuses">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Element definition of an coordinated_statuses. It defines the number of pages and the language of the coordinated_statuses. And it contains the image itself plus its MD5 sum.
+
+				There can be only one abstract per language.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:pages">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The number of pages of the coordinated_statuses.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="language_code" type="par:nat_language_code">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The language of the coordinated_statuses.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:image">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The image of the coordinated_statuses.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:md5sum">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The md5sum of the image.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sub_appendix">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Element definition of an appendix. It defines the type of the appendix, and it contains the image itself plus its MD5 sum.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:image_type">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The type of the appendix.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:image">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The image of the appendix.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:md5sum">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The md5sum of the image.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="sftp_document">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				V3.0 Sftp documents infos. Statutes are sent initially to FedNot in sftp. Sftp location of these files must be communicated to FedNot at "Update deposit" step
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="location" type="xs:string" />
+				<xs:element name="size" type="xs:int" />
+				<xs:element name="hash" type="xs:string" />
+				<xs:element name="hashAlgorithm" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="sub_statutes">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				V3.0 Statutes are sent initially to FedNot in sftp. Sftp location of these files must be communicated to FedNot at "Update deposit" step
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="language" type="par:doc_language_code" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The language code or language codes combination of a deed or initial/coord. statutes doc.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="document_title" type="xs:string" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Ex: Initial Statutes, Coordinated Statutes</xs:documentation>
+				</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:sftp_document" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sub_expedition">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Element definition of an expedition. It contains the number of pages, the signed document, the md5sum of the document, and the stamp value.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:image">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The signed document, base 64 encoded</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="doc" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="doc_id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+							<xs:element ref="sub:pages">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The number of pages of the document.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="sub:md5sum">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The md5sum of the signed document.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="abstracts">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines a sequence (array) of abstracts.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:sub_abstract" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="coordinated_statuses">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines a sequence (array) of coordinated_statuses.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:sub_coordinated_statuses" minOccurs="0" maxOccurs="3"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="appendices">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines a sequence (array) of appendices. It can contain zero elements.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sub:sub_appendix" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sub_billing_address">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines the billing address as Moniteur Belge/Belgisch Staatsblad requires.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="sub_billing_name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The name of the enterprise or person to whom the invoice will be sent. This field is mandatory.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sub_billing_orgunit" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The organizational unit of the enterprise. This field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sub_billing_person_name" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The name of a person, if the field sub_billing_name is an enterprise. This field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contact" type="ent:contactType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Information of contact person.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="address" type="adr:addressType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The address where the invoice will be sent. This field is mandatory.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sub_billing_account">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines the billing account (IBAN and BIC).</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="IBAN" type="iso:iban">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The IBAN number of the billing account.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="BIC" type="iso:bic">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The BIC number of the billing account.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="submittal_data">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Definition of metadata specific to a submittal. It contains a billing address and the enterprise number of where to send the invoice to. They are mandatory if abstracts for publication
+				exist.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="billing-language" type="par:nat_language_code">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The language in which the bill will be sent. Restricted to nl, fr, and de.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:sub_billing_address">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The billing address for the invoice.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sub_billing_enterprise_num" type="ent:enterprise_number" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The enterprise number of the enterprise for the invoice. This field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sub:sub_billing_account" minOccurs="0"/>
+				<xs:element name="sub_billing_email_address" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The billing email address for the invoice.. This field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sub_billing_epayment_reference" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The billing email address for the invoice.. This field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sub_billing_epayment_VATincl" type="xs:boolean" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">V2.3 Indicates if the e-payment amount includes VAT or not. VAT is included by default if the field is not present or if indicator is true</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="publication">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Definition of publication information contains a date of publication plus a unique publication number, for a specific abstract.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="language_code" type="par:nat_language_code">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The language of the published abstract.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="pub_date" type="xs:date">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The date of the publication.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="pub_number" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The unique number of the publication.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="deposit">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Definition of deposit information contains a date of deposit plus a unique deposit number.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="date" type="xs:date">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The date of the deposit.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="number" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The unique number of the deposit (= sipUniqueId of the SIP2 request).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="pages">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The number of pages of a document. This must be an integer greater or equal to one.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:positiveInteger">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

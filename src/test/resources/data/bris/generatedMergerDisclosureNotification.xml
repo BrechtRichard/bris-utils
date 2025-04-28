@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns41:CrossBorderMergerDisclosureNotificationTemplate xmlns="http://ec.europa.eu/bris/v1_4/common/BasicComponents"
+                                                      xmlns:ns41="http://ec.europa.eu/bris/v4_0/br/CrossBorderMergerDisclosureNotificationTemplate"
+                                                      xmlns:ns31="http://ec.europa.eu/bris/v4_0/br/CrossBorderNotificationTemplate"
+                                                      xmlns:ns35="http://ec.europa.eu/bris/v1_5/common/AggregateComponents/CompanyItem"
+                                                      xmlns:ns34="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderCompanyData"
+                                                      xmlns:ns33="http://ec.europa.eu/bris/v1_5/common/AggregateComponents/Addresses"
+                                                      xmlns:ns32="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderSimplifiedCompanyData"
+                                                      xmlns:ns37="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderAdditionalCompanyData"
+                                                      xmlns:ns36="http://ec.europa.eu/bris/v1_7/common/AggregateComponents/CrossBorderDisclosureProposedCompanyData">
+    <NotificationDateTime>2025-04-19T00:21:55.088+02:00</NotificationDateTime>
+    <IssuanceDateTime>2025-04-19T00:21:55.088+02:00</IssuanceDateTime>
+    <ns31:IssuingOrganisation>
+        <BusinessRegisterCode listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                              listName="SampleString" listVersionID="SampleString" name="SampleString"
+                              languageID="nl" listURI="SampleString" listSchemeURI="SampleString">SampleString</BusinessRegisterCode>
+        <LocalisedBusinessRegisterName languageID="nl" >SampleString</LocalisedBusinessRegisterName>
+        <BusinessRegisterCountry listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                                 listName="SampleString" listVersionID="SampleString" name="SampleString"
+                                 languageID="nl" listURI="SampleString" listSchemeURI="SampleString">BE</BusinessRegisterCountry>
+    </ns31:IssuingOrganisation>
+    <ns34:CrossBorderCompanyData>
+        <ns32:Names>
+            <QualifiedCompanyName qualifierValue="main" languageID="nl" >SampleString</QualifiedCompanyName>
+        </ns32:Names>
+        <ns33:RegisteredOffice>
+            <PostalCode languageID="nl" >1234</PostalCode>
+            <City languageID="nl" >SampleString</City>
+            <AddressLine1 languageID="nl" >SampleString</AddressLine1>
+            <AddressLine2 languageID="nl" >SampleString</AddressLine2>
+            <AddressLine3 languageID="nl" >SampleString</AddressLine3>
+            <Country listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                     listName="SampleString" listVersionID="SampleString" name="SampleString" languageID="nl"
+                     listURI="SampleString" listSchemeURI="SampleString">BE</Country>
+        </ns33:RegisteredOffice>
+        <LegalFormCode listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                       listName="SampleString" listVersionID="SampleString" name="SampleString"
+                       languageID="nl" listURI="SampleString" listSchemeURI="SampleString">LF_UK_004</LegalFormCode>
+        <CompanyRegistrationNumber schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                                   schemeAgencyName="SampleString" schemeVersionID="SampleString"
+                                   schemeDataURI="SampleString" schemeURI="SampleString">ATU99999999</CompanyRegistrationNumber>
+        <CompanyEUID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                     schemeAgencyName="SampleString" schemeVersionID="SampleString" schemeDataURI="SampleString"
+                     schemeURI="SampleString">FRIG.2010012341-Z</CompanyEUID>
+        <RegisterDescription languageID="nl" >Register in which the document refer to article 14 are filled-ind</RegisterDescription>
+    </ns34:CrossBorderCompanyData>
+
+    <ns41:ProposedCompanyData>
+        <ns32:Names>
+            <QualifiedCompanyName qualifierValue="main" languageID="nl" >SampleString</QualifiedCompanyName>
+        </ns32:Names>
+        <ns33:RegisteredOffice>
+            <PostalCode languageID="nl" >1234</PostalCode>
+            <City languageID="nl" >SampleString</City>
+            <AddressLine1 languageID="nl" >SampleString</AddressLine1>
+            <AddressLine2 languageID="nl" >SampleString</AddressLine2>
+            <AddressLine3 languageID="nl" >SampleString</AddressLine3>
+            <Country listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                     listName="SampleString" listVersionID="SampleString" name="SampleString" languageID="nl"
+                     listURI="SampleString" listSchemeURI="SampleString">BE</Country>
+        </ns33:RegisteredOffice>
+        <LegalFormCode listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                       listName="SampleString" listVersionID="SampleString" name="SampleString"
+                       languageID="nl" listURI="SampleString" listSchemeURI="SampleString">SampleString</LegalFormCode>
+
+        <!-- either ArrangementsDocument or AdditionalCompanyData -->
+        <!--ns36:ArrangementsDocument>
+            <ns35:CompanyItem>
+                <CompanyItemExplanatoryLabel listID="SampleString" listAgencyID="SampleString"
+                                             listAgencyName="SampleString" listName="SampleString"
+                                             listVersionID="SampleString" name="SampleString" languageID="nl"
+                                             listURI="SampleString" listSchemeURI="SampleString">SampleString</CompanyItemExplanatoryLabel>
+                <CompanyItemValidityStartDate>2025-04-19+02:00</CompanyItemValidityStartDate>
+                <CompanyItemValidityEndDate>2025-04-19+02:00</CompanyItemValidityEndDate>
+            </ns35:CompanyItem>
+            <DocumentID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                        schemeAgencyName="SampleString" schemeVersionID="SampleString" schemeDataURI="SampleString"
+                        schemeURI="SampleString">SampleString
+            </DocumentID>
+            <DocumentFormat listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                            listName="SampleString" listVersionID="SampleString" name="SampleString"
+                            languageID="nl" listURI="SampleString" listSchemeURI="SampleString">PDF</DocumentFormat>
+            <DocumentLanguageCode>bg</DocumentLanguageCode>
+            <DocumentFee currencyID="EUR" currencyCodeListVersionID="SampleString">123.45</DocumentFee>
+            <DocumentSize unitCode="SampleString" unitCodeListVersionID="SampleString">123.45</DocumentSize>
+            <DocumentPublicationDate>2025-04-19+02:00</DocumentPublicationDate>
+            <DocumentPurchasable>true</DocumentPurchasable>
+            <DocumentImmediateDelivery>true</DocumentImmediateDelivery>
+        </ns36:ArrangementsDocument-->
+
+        <!-- either ArrangementsDocument or AdditionalCompanyData -->
+        <ns36:AdditionalCompanyData>
+            <!-- required DraftTermsDocument in AdditionalCompanyData -->
+            <ns37:DraftTermsDocument>
+                <ns35:CompanyItem>
+                    <CompanyItemExplanatoryLabel listID="SampleString" listAgencyID="SampleString"
+                                                 listAgencyName="SampleString" listName="SampleString"
+                                                 listVersionID="SampleString" name="SampleString"
+                                                 languageID="nl" listURI="SampleString"
+                                                 listSchemeURI="SampleString">SampleString</CompanyItemExplanatoryLabel>
+                    <CompanyItemValidityStartDate>2025-04-19+02:00</CompanyItemValidityStartDate>
+                    <CompanyItemValidityEndDate>2025-04-19+02:00</CompanyItemValidityEndDate>
+                </ns35:CompanyItem>
+                <DocumentID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                            schemeAgencyName="SampleString" schemeVersionID="SampleString" schemeDataURI="SampleString"
+                            schemeURI="SampleString">SampleString
+                </DocumentID>
+                <DocumentFormat listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                                listName="SampleString" listVersionID="SampleString" name="SampleString"
+                                languageID="nl" listURI="SampleString" listSchemeURI="SampleString">PDF</DocumentFormat>
+                <DocumentLanguageCode>bg</DocumentLanguageCode>
+                <DocumentFee currencyID="EUR" currencyCodeListVersionID="SampleString">123.45</DocumentFee>
+                <DocumentSize unitCode="SampleString" unitCodeListVersionID="SampleString">123.45</DocumentSize>
+                <DocumentPublicationDate>2025-04-19+02:00</DocumentPublicationDate>
+                <DocumentPurchasable>true</DocumentPurchasable>
+                <DocumentImmediateDelivery>true</DocumentImmediateDelivery>
+            </ns37:DraftTermsDocument>
+
+            <!-- optional OtherLanguageDraftTermsDocument -->
+            <ns37:OtherLanguageDraftTermsDocument>
+                <ns35:CompanyItem>
+                    <CompanyItemExplanatoryLabel listID="SampleString" listAgencyID="SampleString"
+                                                 listAgencyName="SampleString" listName="SampleString"
+                                                 listVersionID="SampleString" name="SampleString"
+                                                 languageID="nl" listURI="SampleString"
+                                                 listSchemeURI="SampleString">SampleString</CompanyItemExplanatoryLabel>
+                    <CompanyItemValidityStartDate>2025-04-19+02:00</CompanyItemValidityStartDate>
+                    <CompanyItemValidityEndDate>2025-04-19+02:00</CompanyItemValidityEndDate>
+                </ns35:CompanyItem>
+                <DocumentID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                            schemeAgencyName="SampleString" schemeVersionID="SampleString" schemeDataURI="SampleString"
+                            schemeURI="SampleString">SampleString
+                </DocumentID>
+                <DocumentFormat>PDF</DocumentFormat>
+                <DocumentLanguageCode>bg</DocumentLanguageCode>
+                <DocumentFee currencyID="EUR" currencyCodeListVersionID="SampleString">123.45</DocumentFee>
+                <DocumentSize unitCode="SampleString" unitCodeListVersionID="SampleString">123.45</DocumentSize>
+                <DocumentPublicationDate>2025-04-19+02:00</DocumentPublicationDate>
+                <DocumentPurchasable>true</DocumentPurchasable>
+                <DocumentImmediateDelivery>true</DocumentImmediateDelivery>
+            </ns37:OtherLanguageDraftTermsDocument>
+
+            <!-- optional FinancialStatusDocument -->
+            <ns37:FinancialStatusDocument>
+                <ns35:CompanyItem>
+                    <CompanyItemExplanatoryLabel listID="SampleString" listAgencyID="SampleString"
+                                                 listAgencyName="SampleString" listName="SampleString"
+                                                 listVersionID="SampleString" name="SampleString"
+                                                 languageID="nl" listURI="SampleString"
+                                                 listSchemeURI="SampleString">SampleString</CompanyItemExplanatoryLabel>
+                    <CompanyItemValidityStartDate>2025-04-19+02:00</CompanyItemValidityStartDate>
+                    <CompanyItemValidityEndDate>2025-04-19+02:00</CompanyItemValidityEndDate>
+                </ns35:CompanyItem>
+                <DocumentID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                            schemeAgencyName="SampleString" schemeVersionID="SampleString" schemeDataURI="SampleString"
+                            schemeURI="SampleString">SampleString
+                </DocumentID>
+                <DocumentFormat>PDF</DocumentFormat>
+                <DocumentLanguageCode>bg</DocumentLanguageCode>
+                <DocumentFee currencyID="EUR" currencyCodeListVersionID="SampleString">123.45</DocumentFee>
+                <DocumentSize unitCode="SampleString" unitCodeListVersionID="SampleString">123.45</DocumentSize>
+                <DocumentPublicationDate>2025-04-19+02:00</DocumentPublicationDate>
+                <DocumentPurchasable>true</DocumentPurchasable>
+                <DocumentImmediateDelivery>true</DocumentImmediateDelivery>
+            </ns37:FinancialStatusDocument>
+
+            <!-- required Notice -->
+            <ns37:Notice>
+                <ns37:CompanyNameCarryingCrossBorderOperation languageID="nl" >SampleString</ns37:CompanyNameCarryingCrossBorderOperation>
+                <ns37:DeadlineForComments>2025-04-19+02:00</ns37:DeadlineForComments>
+                <ns37:Document>
+                    <ns35:CompanyItem>
+                        <CompanyItemExplanatoryLabel>SampleString</CompanyItemExplanatoryLabel>
+                        <CompanyItemValidityStartDate>2025-04-19+02:00</CompanyItemValidityStartDate>
+                        <CompanyItemValidityEndDate>2025-04-19+02:00</CompanyItemValidityEndDate>
+                    </ns35:CompanyItem>
+                    <DocumentID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                                schemeAgencyName="SampleString" schemeVersionID="SampleString"
+                                schemeDataURI="SampleString" schemeURI="SampleString">SampleString
+                    </DocumentID>
+                    <DocumentFormat>PDF</DocumentFormat>
+                    <DocumentLanguageCode>bg</DocumentLanguageCode>
+                    <DocumentFee currencyID="EUR">123.45</DocumentFee>
+                    <DocumentSize unitCode="123.00">123.45</DocumentSize>
+                    <DocumentPublicationDate>2025-04-19+02:00</DocumentPublicationDate>
+                    <DocumentPurchasable>true</DocumentPurchasable>
+                    <DocumentImmediateDelivery>true</DocumentImmediateDelivery>
+                </ns37:Document>
+            </ns37:Notice>
+
+            <!-- optional IndependentExpertReportDocument -->
+            <ns37:IndependentExpertReportDocument>
+                <ns35:CompanyItem>
+                    <CompanyItemExplanatoryLabel>SampleString</CompanyItemExplanatoryLabel>
+                    <CompanyItemValidityStartDate>2025-04-19+02:00</CompanyItemValidityStartDate>
+                    <CompanyItemValidityEndDate>2025-04-19+02:00</CompanyItemValidityEndDate>
+                </ns35:CompanyItem>
+                <DocumentID schemeID="SampleString" schemeName="SampleString" schemeAgencyID="SampleString"
+                            schemeAgencyName="SampleString" schemeVersionID="SampleString" schemeDataURI="SampleString"
+                            schemeURI="SampleString">SampleString</DocumentID>
+                <DocumentFormat listID="SampleString" listAgencyID="SampleString" listAgencyName="SampleString"
+                                listName="SampleString" listVersionID="SampleString" name="SampleString"
+                                languageID="nl" listURI="SampleString" listSchemeURI="SampleString">PDF</DocumentFormat>
+                <DocumentLanguageCode>bg</DocumentLanguageCode>
+                <DocumentFee currencyID="EUR" currencyCodeListVersionID="SampleString">123.45</DocumentFee>
+                <DocumentSize unitCode="SampleString" unitCodeListVersionID="SampleString">123.45</DocumentSize>
+                <DocumentPublicationDate>2025-04-19+02:00</DocumentPublicationDate>
+                <DocumentPurchasable>true</DocumentPurchasable>
+                <DocumentImmediateDelivery>true</DocumentImmediateDelivery>
+            </ns37:IndependentExpertReportDocument>
+        </ns36:AdditionalCompanyData>
+
+        <!-- OPTIONAL Website details -->
+        <WebsiteDetails languageID="nl" >https://new.company.com</WebsiteDetails>
+    </ns41:ProposedCompanyData>
+</ns41:CrossBorderMergerDisclosureNotificationTemplate>

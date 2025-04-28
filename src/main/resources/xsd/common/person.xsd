@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:per="http://fsb.belgium.be/edepot-v3/person" targetNamespace="http://fsb.belgium.be/edepot-v3/person" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+      Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2.
+			Schema version: 1.1 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+			Schema version: 1.0 RC1 Date: 2005-04-08 Author: Ignaz Wanders
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:simpleType name="person_num">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This can be a national registry number or a bis registry number of the person.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{11}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="person_nrn">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The type definition of the number of a person. It is based on a string to avoid problems with leading zeroes.
+
+				Validation rules: - The length is 11 digits, of which the last two are control digits. - The first six digits are the birth date in the format yymmdd. - Let num1 = number(0:9) and num2
+				= number(9:11) - Then num2 = 97 - (num1 % 97) for birth dates up to 31/12/1999 and num2 = 97 - ( (num1 + 2*10^9) % 97 ) for birth dates later than 31/12/1999
+
+				The modulus and birth date can not be captured in a regular expression, but the basic check on the digits and the length are used in a regular expression to validate the enterprise
+				number.
+
+				Note that birth dates are not always known, and exceptions to the birth date rule exist. Therefore, the birth date should not be considered in a validation rule.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{11}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

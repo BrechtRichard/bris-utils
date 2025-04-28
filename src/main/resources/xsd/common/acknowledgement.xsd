@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ack="http://fsb.belgium.be/edepot-v3/acknowledgement" targetNamespace="http://fsb.belgium.be/edepot-v3/acknowledgement"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+       Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2.
+       Schema version: 1.0 RC1 Date: 2005-04-07 Author: Ignaz Wanders
+    </xs:documentation>
+	</xs:annotation>
+
+	<xs:complexType name="acknowledgement">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The general type definition of an acknowledgement. It contains a number as an identification, a timestamp, and an optional status field.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="number" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The number is an identifier for the acknowledgement</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="timestamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The timestamp when the acknowledgement was issued</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="status" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">An optional status field for the acknowledgement</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

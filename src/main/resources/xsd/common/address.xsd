@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by David Coppens (Sopra Banking Software) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:adr="http://fsb.belgium.be/edepot-v3/address" xmlns:iso="http://fsb.belgium.be/edepot-v3/common/isocodes" targetNamespace="http://fsb.belgium.be/edepot-v3/address" xmlns:par="http://fsb.belgium.be/edepot-v3/parameter" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Schema version 3.1 Date: 2024-08-05 Author: Mathieu Steenput - Add documentation about streetCode and nisCode usage
+			Schema version 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2
+ 			Schema version 2.3 Date 2021-07 Author : Rudy Tedaldi - Create Belgian branches of foreign enterprise
+ 			Schema version ?: Date: 2014-06-26 Author: Rudy Tedaldi adds address schema where all fields are optional to fit with current KBO state.
+ 			Schema version ?: Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+			Schema version 2.2 Date: 2006-12-19 Author: Ignaz Wanders
+
+			Changes in version: 2.2 removed the four-digit constraint from the streetcode. (apparently, alphanumeric streetcodes exist)
+      
+      Phase 2: replace iso:language by par:nat_language
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/parameter" schemaLocation="parameter.xsd"/>
+	<xs:simpleType name="emailType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The general type
+				definition of an e-mail address. The (simplified) regular expression
+				pattern for an e-mail address that is used is
+				(\w[\-._\w]*\w@\w[\-._\w]*\w\.\w{2,})
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(\w[\-._\w]*\w*@\w[\-._\w]*\w*\.\w{2,})"/>
+			<!-- <xs:pattern value="(\w[\-._\w]*\w@\w[\-._\w]*\w\.\w{2,4})" />-->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="streetCodeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">StreetCode must be compound of four digits.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<!--
+				restriction removed to allow alphanumeric streetcodes
+			-->
+			<xs:pattern value="\w+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="nisCodeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">NISCode must be compound of five digits.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{5}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="descriptionType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The type definition of a container for descriptive properties of an address. These includes names of streets, municipalities, etc.
+
+				Descriptions are always language-dependent.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="street" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3 The street name - Mandatory</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="municipality" type="xs:string" >
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3 The name of the municipality - Mandatory</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="city" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the city. This is an optional field.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="country" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="details" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Any additional details of the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="language" type="par:nat_language_code" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The language code of the address. Only fr, nl or de accepted in Belgium</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="base-addressType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The address type defines basic properties that are valid for all addresses, such as house number, postbox, and postcode.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="houseNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The house number 
+						Note: due to a limitation in the KBO/BCE, house numbers may be truncated to four characters, if the KBO/BCE is involved in a server transaction. (TBC)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="postBox" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The postbox is an optional field.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="postCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The postcode. This is a mandatory field.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="countryCode" type="iso:country">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The ISO country code of the address. This field is mandatory.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="adr:descriptionType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="base-addressOptionalType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">V3: Same as base-addressType, except that all the fields are optional. Cause: all the fields are optional in KBO. ==> Will be used only in correction mode</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="houseNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+            The house number. This is a mandatory field. If no house number is known, the letters ZN (Dutch: "zonder naam") should be used.
+
+            Note: due to a limitation in the KBO/BCE, house numbers may be truncated to four characters, if the KBO/BCE is involved in a server transaction.
+          </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="postBox" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The postbox is an optional field.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="postCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The postcode is optional in this specific message type</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="countryCode" type="iso:country" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The ISO country code of the address. This field is optional in this specific message type.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="adr:descriptionType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="belgian-addressType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The belgian-addressType is an address and adds a few codes which uniquely define a Belgian address. These codes are NIS codes for municpalities, and street codes for streets. The use
+				of codes makes the address independent of language.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="adr:base-addressType">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Please note that the streetCode and nisCode should be provided together. If both are filled, the bestAddressType must be empty.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="streetCode" type="adr:streetCodeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The street code.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="nisCode" type="adr:nisCodeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The NIS code of the municipality.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="bestAddressType" type="adr:bestIdentifierType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The best address type.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="foreign-addressType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A foreign address is an address without using codes for municipalities and streets, we are forced to use descriptive text for those fields.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="adr:base-addressType">
+				<xs:sequence>
+					<xs:element name="state" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="belgian-addressOptionalType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+        V3 : belgian-addressType where all fields are optional.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="adr:base-addressOptionalType">
+				<xs:sequence>
+					<xs:element name="streetCode" type="adr:streetCodeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The street code.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="nisCode" type="adr:nisCodeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The NIS code of the municipality.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="foreign-addressOptionalType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+        V3: foreign-addressType where all fields are optional
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="adr:base-addressOptionalType">
+				<xs:sequence>
+					<xs:element name="state" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="addressType">
+		<xs:choice>
+			<xs:element name="belgian-address" type="adr:belgian-addressType"/>
+			<xs:element name="foreign-address" type="adr:foreign-addressType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="addressOptionalType">
+		<xs:choice>
+			<xs:element name="belgian-address" type="adr:belgian-addressOptionalType"/>
+			<xs:element name="foreign-address" type="adr:foreign-addressOptionalType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="bestIdentifierType">
+		<xs:sequence>
+			<xs:element name="namespace" type="xs:string" minOccurs="0"/>
+			<xs:element name="objectId" type="xs:string" minOccurs="0"/>
+			<xs:element name="versionId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:edmda="http://fednot.be/naban/eDepotModificationDepositArchive"
+		   elementFormDefault="qualified"
+		   targetNamespace="http://fednot.be/naban/eDepotModificationDepositArchive">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			DRAFT version
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:simpleType name="eDepotModificationType" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="eDepotModification" />
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<!-- juridical district for EDepot Modification -->
+	<xs:simpleType name="juridicalDistrictType" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ANTWERPEN" />
+			<xs:enumeration value="BRABANT_WALLON" />
+			<xs:enumeration value="BRUSSEL" />
+			<xs:enumeration value="BRUXELLES" />
+			<xs:enumeration value="EUPEN_DE" /> <!-- keep it for legacy purpose -->
+			<xs:enumeration value="EUPEN" />
+			<xs:enumeration value="HAINAUT" />
+			<xs:enumeration value="LEUVEN" />
+			<xs:enumeration value="LIEGE" />
+			<xs:enumeration value="LIMBURG" />
+			<xs:enumeration value="LUXEMBOURG" />
+			<xs:enumeration value="NAMUR" />
+			<xs:enumeration value="OOST-VLAANDEREN" />
+			<xs:enumeration value="WEST-VLAANDEREN" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="juridicalDistrictDivisionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ANTWERPEN">
+				<xs:annotation>
+					<xs:documentation>The ANTWERPEN juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TURNHOUT">
+				<xs:annotation>
+					<xs:documentation>The TURNHOUT juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MECHELEN">
+				<xs:annotation>
+					<xs:documentation>The MECHELEN juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="VEURNE">
+				<xs:annotation>
+					<xs:documentation>The VEURNE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="KORTRIJK">
+				<xs:annotation>
+					<xs:documentation>The KORTRIJK juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BRUGGE">
+				<xs:annotation>
+					<xs:documentation>The BRUGGE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OOSTENDE">
+				<xs:annotation>
+					<xs:documentation>The OOSTENDE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="IEPER">
+				<xs:annotation>
+					<xs:documentation>The IEPER juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LEUVEN">
+				<xs:annotation>
+					<xs:documentation>The LEUVEN juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BRUSSEL">
+				<xs:annotation>
+					<xs:documentation>The BRUSSEL juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BRUXELLES">
+				<xs:annotation>
+					<xs:documentation>The BRUXELLES juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BRABANT_WALLON">
+				<xs:annotation>
+					<xs:documentation>The BRABANT_WALLON juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DENDERMONDE">
+				<xs:annotation>
+					<xs:documentation>The DENDERMONDE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="GENT">
+				<xs:annotation>
+					<xs:documentation>The GENT juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OUDENAARDE">
+				<xs:annotation>
+					<xs:documentation>The OUDENAARDE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TONGEREN">
+				<xs:annotation>
+					<xs:documentation>The TONGEREN juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HASSELT">
+				<xs:annotation>
+					<xs:documentation>The HASSELT juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HUY">
+				<xs:annotation>
+					<xs:documentation>The HUY juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EUPEN">
+				<xs:annotation>
+					<xs:documentation>The EUPEN juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LIEGE">
+				<xs:annotation>
+					<xs:documentation>The LIEGE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="VERVIERS">
+				<xs:annotation>
+					<xs:documentation>The VERVIERS juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CHARLEROI">
+				<xs:annotation>
+					<xs:documentation>The CHARLEROI juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TOURNAI">
+				<xs:annotation>
+					<xs:documentation>The TOURNAI juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MONS">
+				<xs:annotation>
+					<xs:documentation>The MONS juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NAMUR">
+				<xs:annotation>
+					<xs:documentation>The NAMUR juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DINANT">
+				<xs:annotation>
+					<xs:documentation>The DINANT juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ARLON">
+				<xs:annotation>
+					<xs:documentation>The ARLON juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NEUFCHATEAU">
+				<xs:annotation>
+					<xs:documentation>The NEUFCHATEAU juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MARCHE-EN-FAMENNE">
+				<xs:annotation>
+					<xs:documentation>The MARCHE-EN-FAMENNE juridical district division.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- legal language for EDepot Modification -->
+	<xs:simpleType name="eDepotLanguage" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="fr" />
+			<xs:enumeration value="nl" />
+			<xs:enumeration value="de" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="localized" abstract="true">
+		<xs:attribute name="language" type="edmda:eDepotLanguage" use="required"/>
+	</xs:complexType>
+
+	<xs:complexType name="localizedName">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="value" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="asIsHeadOfficeAddress">
+		<xs:sequence>
+			<xs:element name="number" type="xs:string" />
+			<xs:element name="postbox" type="xs:string" minOccurs="0"/>
+			<xs:element name="postalCode" type="xs:string" />
+			<xs:element name="countryCode" type="xs:string" />
+
+			<xs:element name="nisCode" type="xs:string" />
+			<xs:element name="streetCode" type="xs:string" />
+
+			<xs:element name="municipalityNames" type="edmda:localizedName" maxOccurs="3"/>
+			<xs:element name="streetNames" type="edmda:localizedName" maxOccurs="3"/>
+
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="headOfficeAddressChange">
+		<xs:complexContent>
+			<xs:extension base="edmda:asIsHeadOfficeAddress">
+				<xs:sequence>
+					<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="stoppedAddress">
+		<xs:sequence>
+			<xs:element name="effectivityDate" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="stoppedGlobalDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="asIsSocialDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="socialDenomination" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="updatedSocialDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="socialDenomination" type="xs:string"/>
+					<xs:element name="effectivityDate" type="xs:date"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="stoppedSocialDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="asIsAbbreviatedDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="abbreviatedDenomination" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="updatedAbbreviatedDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="abbreviatedDenomination" type="xs:string"/>
+					<xs:element name="effectivityDate" type="xs:date"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="stoppedAbbreviatedDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="asIsCommercialDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="commercialDenomination" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="updatedCommercialDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="commercialDenomination" type="xs:string"/>
+					<xs:element name="effectivityDate" type="xs:date"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="stoppedCommercialDenomination">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="publication">
+		<xs:complexContent>
+			<xs:extension base="edmda:localized">
+				<xs:sequence>
+					<xs:element name="publicationText" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="person" abstract="true">
+		<xs:attribute name="ID" type="xs:ID" use="required"/>
+	</xs:complexType>
+
+	<xs:complexType name="physicalPerson">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				All physical person that have a function assigned in the company
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="edmda:person">
+				<xs:sequence>
+					<xs:element name="rnRbis" type="xs:string"/><!-- Formatting rule ? -->
+					<xs:element name="firstNames" type="xs:string" minOccurs="0"/> <!-- Mandatory ? -->
+					<xs:element name="lastName" type="xs:string" minOccurs="0"/> <!-- Mandatory ? -->
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="moralPerson">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				All moral parties that have a function assigned in the company
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="edmda:person">
+				<xs:sequence>
+					<xs:element name="enterpriseName" type="xs:string"/> <!-- Mandatory ? In which language ? -->
+					<xs:element name="bceNumber" type="xs:string"/><!-- Formatting rule ? -->
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="addedPersonFunction">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				function between a person and the company
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="person" type="xs:IDREF" />
+			<xs:element name="functionCode" type="xs:string" />
+			<xs:element name="startDate" type="xs:date" />
+			<xs:element name="representedMoralPerson" type="xs:IDREF" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="stoppedPersonFunction">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				function between a person and the company
+			</xs:documentation>		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="person" type="xs:IDREF" />
+			<xs:element name="functionCode" type="xs:string" />
+			<xs:element name="endDate" type="xs:date"/>
+			<xs:element name="stopJustificationCode" type="xs:string" />
+			<xs:element name="representedMoralPerson" type="xs:IDREF" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="office">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string"/>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="bceNumber" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="document">
+		<xs:sequence>
+			<xs:element name="oid" type="xs:string"/>
+<!--			<xs:element name="type" type="edmda:eDepotDocumentType" minOccurs="0"/>-->
+			<xs:element name="type" type="xs:string" minOccurs="0"/> <!-- remove enumeration -->
+			<xs:element name="title" type="xs:string" minOccurs="0"/>
+			<xs:element name="languages" type="xs:string" minOccurs="0" maxOccurs="3"/>
+		</xs:sequence>
+		<xs:attribute name="ID" type="xs:ID"/>
+	</xs:complexType>
+
+	<xs:complexType name="annex">
+		<xs:complexContent>
+			<xs:extension base="edmda:document">
+				<xs:sequence>
+					<xs:element name="date" type="xs:date" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:simpleType name="eDepotDocumentType" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="minute" />
+			<xs:enumeration value="annex" />
+			<xs:enumeration value="statutes" />
+			<xs:enumeration value="voletB_FR" />
+			<xs:enumeration value="voletB_NL" />
+			<xs:enumeration value="voletB_DE" />
+			<xs:enumeration value="prsu100U" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="eDepotType" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="eDepotCreation" />
+			<xs:enumeration value="eDepotModification" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="notary">
+		<xs:sequence>
+			<xs:element name="personId" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+
+
+	<xs:complexType name="financialDataChange">
+		<xs:sequence>
+			<xs:element name="effectivityDate" type="xs:date"/>
+
+			<xs:element name="capitalAmount" type="xs:double" minOccurs="0"/>
+
+			<xs:element name="capitalCurrency" type="xs:string" minOccurs="0"/> <!-- EUR only ? -->
+
+			<xs:element name="companyDuration" type="xs:int" minOccurs="0"/> <!-- 0 to 100 => 0 means unlimited -->
+
+			<xs:element name="agmMonth" type="xs:int" minOccurs="0"/> <!-- 1 to 12 -->
+
+			<xs:element name="fiscalYearEndMonth" type="xs:int" minOccurs="0"/> <!-- 1 to 12 -->
+			<xs:element name="fiscalYearEndDay" type="xs:int" minOccurs="0"/> <!-- 1 to 31 -->
+
+			<xs:element name="exceptionnalFiscalYearStart" type="xs:date" minOccurs="0"/>
+			<xs:element name="exceptionnalFiscalYearEnd" type="xs:date" minOccurs="0"/>
+
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="legalFormChange">
+		<xs:sequence>
+			<xs:element name="legalFormCode" type="xs:string"/>
+			<xs:element name="effectivityDate" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="updatedEmail">
+		<xs:sequence>
+			<xs:element name="email" type="xs:string"/>
+			<xs:element name="effectivityDate" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="stoppedEmail">
+		<xs:sequence>
+			<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="updatedWebsite">
+		<xs:sequence>
+			<xs:element name="website" type="xs:string"/>
+			<xs:element name="effectivityDate" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="stoppedWebsite">
+		<xs:sequence>
+			<xs:element name="effectivityDate" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="eDepotModificationDepositArchive">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Describe metadata related to an eDepot Modification that a notary will sign in order to send it to NABAN
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="referenceXsdOid" type="xs:string" minOccurs="0"/>
+				<xs:element name="referenceGlossaryOid" type="xs:string" minOccurs="0"/>
+
+				<xs:element name="prsu100UGenerationDate" type="xs:dateTime"/>
+
+				<xs:element name="eDepotType" type="edmda:eDepotType" />
+
+				<xs:element name="requestId" type="xs:string" />
+
+				<xs:element name="deedUniqueId" type="xs:string"/>
+				<xs:element name="deedDate" type="xs:date"/>
+				<xs:element name="deedHour" type="xs:time" minOccurs="0"/>
+
+				<xs:element name="deedTypeUniqueId" type="xs:string"/>
+
+				<xs:element name="office" type="edmda:office"/>
+				<xs:element name="penHolder" type="edmda:notary"/>
+
+				<xs:element name="enterpriseNumber" type="xs:string"/> <!-- existing one -->
+
+				<xs:element name="asIsLegalForm" type="xs:string" minOccurs="0"/>
+				<xs:element name="legalFormChange" type="edmda:legalFormChange" minOccurs="0"/>
+
+				<xs:element name="asIsEmail" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="updatedEmail" type="edmda:updatedEmail" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="stoppedEmail" type="edmda:stoppedEmail" minOccurs="0" maxOccurs="unbounded"/>
+
+				<xs:element name="asIsWebsite" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="updatedWebsite" type="edmda:updatedWebsite" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="stoppedWebsite" type="edmda:stoppedWebsite" minOccurs="0" maxOccurs="unbounded"/>
+
+				<xs:element name="asIsHeadOfficeAddress" type="edmda:asIsHeadOfficeAddress" minOccurs="0"/>
+				<xs:element name="headOfficeAddressChange" type="edmda:headOfficeAddressChange" minOccurs="0"/>
+
+				<xs:element name="asIsSocialDenominations" type="edmda:asIsSocialDenomination" minOccurs="0" maxOccurs="3"/>
+				<xs:element name="updatedSocialDenominations" type="edmda:updatedSocialDenomination" minOccurs="0" maxOccurs="3"/>
+				<xs:element name="stoppedSocialDenominations" type="edmda:stoppedSocialDenomination" minOccurs="0" maxOccurs="3"/>
+
+				<xs:element name="asIsAbbreviatedDenominations" type="edmda:asIsAbbreviatedDenomination" minOccurs="0" maxOccurs="3"/>
+				<xs:element name="updatedAbbreviatedDenominations" type="edmda:updatedAbbreviatedDenomination" minOccurs="0" maxOccurs="3"/>
+				<xs:element name="stoppedAbbreviatedDenominations" type="edmda:stoppedAbbreviatedDenomination" minOccurs="0" maxOccurs="3"/>
+
+				<xs:element name="asIsCommercialDenominations" type="edmda:asIsCommercialDenomination" minOccurs="0" maxOccurs="3"/>
+				<xs:element name="updatedCommercialDenominations" type="edmda:updatedCommercialDenomination" minOccurs="0" maxOccurs="3"/>
+				<xs:element name="stoppedCommercialDenominations" type="edmda:stoppedCommercialDenomination" minOccurs="0" maxOccurs="3"/>
+
+				<xs:element name="publications" type="edmda:publication" maxOccurs="3" />
+
+				<xs:element name="financialDataChange" type="edmda:financialDataChange" minOccurs="0"/>
+
+				<xs:element name="deedObjectCode" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+
+				<xs:element name="physicalPerson" type="edmda:physicalPerson" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="moralPerson" type="edmda:moralPerson" minOccurs="0" maxOccurs="unbounded"/>
+
+				<xs:element name="addedPersonFunction" type="edmda:addedPersonFunction" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="stoppedPersonFunction" type="edmda:stoppedPersonFunction" minOccurs="0" maxOccurs="unbounded"/>
+
+				<xs:element name="document" type="edmda:document" minOccurs="2" maxOccurs="unbounded"/> <!-- AT least 2 documents : the MINUTE, a VoletB -->
+				<!--<xs:element name="prsu100U" type="xs:string" />--> <!-- THIS PRSU100U HAS BEEN ADDEED in the previous list of document -->
+
+				<xs:element name="annex" type="edmda:annex" minOccurs="0" maxOccurs="unbounded"/>
+
+				<xs:element name="asIsLegalLanguage" type="edmda:eDepotLanguage" minOccurs="0"/>  <!-- min occurs to 0 for legacy xml -->
+				<xs:element name="asIsJuridicalDistrict" type="edmda:juridicalDistrictType" minOccurs="0"/>  <!-- min occurs to 0 for legacy xml -->
+				<xs:element name="asIsJuridicalDistrictDivision" type="edmda:juridicalDistrictDivisionType" minOccurs="0"/>  <!-- min occurs to 0 for legacy xml -->
+
+
+				<xs:element name="newLegalLanguage" type="edmda:eDepotLanguage" minOccurs="0"/>
+				<xs:element name="newJuridicalDistrict" type="edmda:juridicalDistrictType" minOccurs="0"/>
+				<xs:element name="newJuridicalDistrictDivision" type="edmda:juridicalDistrictDivisionType" minOccurs="0"/>
+
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

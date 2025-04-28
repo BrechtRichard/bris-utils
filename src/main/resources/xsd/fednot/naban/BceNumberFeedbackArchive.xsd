@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   elementFormDefault="qualified"
+		   targetNamespace="http://fednot.be/naban/bceNumberFeedbackArchive">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Prsu120 BCE Number feedback metadata archive.
+
+			History of changes:
+			- 11/06/2024 : no longer possible to pass the deposit date in the archive xml.
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:element name="bceNumberFeedbackArchive">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Describe metadata related to a bce number feedback received by edepot-ws-gov module
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="referenceXsdOid" type="xs:string" minOccurs="0"/>
+				<xs:element name="receivalDate" type="xs:date"/> <!-- date when ws-gov receive the feedback -->
+				<xs:element name="receivalTime" type="xs:time"/> <!-- time when ws-gov receive the feedback -->
+				<xs:element name="enterpriseNumber" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

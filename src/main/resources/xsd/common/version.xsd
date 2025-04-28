@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ver="http://fsb.belgium.be/edepot-v3/version" targetNamespace="http://fsb.belgium.be/edepot-v3/version" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+      Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2. + message_version must have '3' as major version part.
+      Schema version: 2.0 Date: 2012-07-20 Author: Rudy Tedaldi - Add comments
+      Schema version: 1.0 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+    </xs:documentation>
+	</xs:annotation>
+
+	<xs:element name="version">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The version of the message and the client interface.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+        <xs:element name="message_version" minOccurs="1">
+          <xs:annotation>
+           <xs:documentation xml:lang="en">
+              Current version schema, set by the eDepot WLI application. Major version part must be 3.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="3.\d+"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+				<xs:element name="client_interface_version" type="xs:string" minOccurs="0" >
+        <xs:annotation>
+          <xs:documentation xml:lang="en">
+            Version of the client interface, set by the client application
+          </xs:documentation>
+        </xs:annotation>
+        </xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

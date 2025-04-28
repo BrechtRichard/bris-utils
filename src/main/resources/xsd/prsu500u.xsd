@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:not="http://fsb.belgium.be/edepot-v3/notary"
+		   xmlns:acc="http://fsb.belgium.be/edepot-v3/accountant"
+		   xmlns:cit="http://fsb.belgium.be/edepot-v3/citizen"
+		   xmlns:sub="http://fsb.belgium.be/edepot-v3/submittal"
+           xmlns:ack="http://fsb.belgium.be/edepot-v3/acknowledgement"
+           xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+           xmlns:upd="http://fsb.belgium.be/edepot-v3/update"
+		   xmlns:adr="http://fsb.belgium.be/edepot-v3/address"
+		   xmlns:ver="http://fsb.belgium.be/edepot-v3/version"
+           targetNamespace="http://fsb.belgium.be/edepot-v3/prsu500u"
+		   elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+			Schema version: 3.1 Date: 2024-09-02 Author: Rudy Tedaldi/Philippe Delvaux - Onboarded 'Accountants'.
+			Schema version: 3.0 Date: 2023-06-26 Author: Davy Toch - Target namespace now edepot-v3 instead of
+            edepot-v3.
+            Schema version: 2 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+            Schema version: 1.0 Date: 2007-10-02 Author: Tom Michiels
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/notary" schemaLocation="common/notary.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/accountant" schemaLocation="common/accountant.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/citizen" schemaLocation="common/citizen.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/acknowledgement" schemaLocation="common/acknowledgement.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="common/enterprise.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/address" schemaLocation="common/address.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/submittal" schemaLocation="common/submittal.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/update" schemaLocation="common/update.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/version" schemaLocation="common/version.xsd"/>
+    <xs:element name="prsu500u">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ver:version"/>
+                <xs:choice>
+                    <xs:element ref="not:notary"/>
+					<xs:element ref="acc:accountant"/>
+					<xs:element ref="cit:citizen"/>
+                </xs:choice>
+                <xs:element ref="sub:submittal_timestamp"/>
+                <xs:element ref="sub:act_date"/>
+                <xs:element ref="sub:act_effectivity_date" minOccurs="0"/>
+                <xs:element ref="sub:act_nature"/>
+                <xs:element ref="sub:act_uid"/>
+                <xs:element ref="sub:submittal_data"/>
+                <xs:element ref="sub:abstracts"/>
+                <xs:element name="enterprise_num" type="ent:enterprise_number"/>
+                <xs:element name="acknowledgement" type="ack:acknowledgement">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The acknowledgement contains a unique ID which identifies this successful submittal. It is
+                            this acknowledgement, including its unique ID, which will be passed on to all
+                            subsequent PRSU messages for unique identification of the process.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="sub:act_purpose"/>
+                <xs:element ref="sub:deposit"/>
+                <xs:element ref="ent:juridical_form" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">The juridical form of the enterprise.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="official_address" type="adr:addressType"/>
+                <xs:element ref="ent:name" maxOccurs="unbounded"/>
+                <xs:element ref="ent:name_after_change" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="update" type="upd:updatejustice"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:per="http://fsb.belgium.be/edepot-v3/person"
+		   xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+		   xmlns:iso="http://fsb.belgium.be/edepot-v3/common/isocodes"
+		   xmlns:par="http://fsb.belgium.be/edepot-v3/parameter"
+		   targetNamespace="http://fsb.belgium.be/edepot-v3/citizen"
+		   elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of
+			edepot-v2.
+			Schema version: 1.2 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+			Schema version: 1.1 Date: 2011-05-19 Author: Tom Michiels
+
+			Phase 2: replace iso:language by par:kbo_answer_language
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/person" schemaLocation="person.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="enterprise.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/parameter" schemaLocation="parameter.xsd"/>
+	<xs:element name="citizen">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The general identification of a citizen.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="trusted_eGrf_nrn" type="per:person_nrn">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The trusted eGriffie number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="nrn" type="per:person_nrn">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The national registry number of the citizen.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="email" type="xs:string">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The Email of the citizen</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="lang" type="par:kbo_answer_language_code">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The language in which the citizen prefers to receive answers. Note: KBO/BCE currently only
+							recognizes "nl" and "fr" as valid languages.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="department_code" type="ent:enterprise_number">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The KBO/BCE enterprise number of the citizen.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="agency_code" type="ent:enterprise_number">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The KBO/BCE enterprise number of the federation.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

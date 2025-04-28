@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:per="http://fsb.belgium.be/edepot-v3/person"
+           xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+           xmlns:par="http://fsb.belgium.be/edepot-v3/parameter"
+           targetNamespace="http://fsb.belgium.be/edepot-v3/accountant"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema version: 1.0 Date: 2024-09-02 Author: Rudy Tedaldi/Philippe Delvaux - Initial creation of the 'Accountant' schema.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd" />
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/person" schemaLocation="person.xsd" />
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="enterprise.xsd" />
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/parameter" schemaLocation="parameter.xsd" />
+    <xs:element name="accountant">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The general identification of an accountant.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="office_id" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The general ID of the accountant. It is this ID that the FSB will use to identify an accountant.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="lang" type="par:kbo_answer_language_code">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The language in which the accountant prefers to receive answers. Note: KBO/BCE currently only recognizes "nl" and "fr" as valid languages.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="nrn" type="per:person_nrn">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The national registry number of the accountant.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="num_kbo_acc" type="ent:enterprise_number">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The KBO/BCE enterprise number of the accountant.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="num_kbo_fed" type="ent:enterprise_number">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The KBO/BCE enterprise number of the federation of accountants.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

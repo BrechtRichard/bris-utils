@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema targetNamespace="http://fsb.belgium.be/edepot-v3/create" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cre="http://fsb.belgium.be/edepot-v3/create"
+	xmlns:not="http://fsb.belgium.be/edepot-v3/notary" xmlns:sub="http://fsb.belgium.be/edepot-v3/submittal" xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+	xmlns:adr="http://fsb.belgium.be/edepot-v3/address" xmlns:acc="http://fsb.belgium.be/edepot-v3/account" xmlns:iso="http://fsb.belgium.be/edepot-v3/common/isocodes"
+	xmlns:per="http://fsb.belgium.be/edepot-v3/person" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+      Schema version: 3.1 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of edepot-v2.
+			Schema version: 3.0 Date: 2022-05-18 Author : Rudy Tedaldi : ANNA/NABAN/COSTA integration - This is a new version not retrocompatible !
+			Schema version: 2.3 Date: 2021-06-28 Author : Rudy Tedaldi : Belgian branch of foreign enterprise
+			Schema version: 1.1 Date: 2019-03-01 Author : BOSA (Davy Toch) Change : prsu100c/create/officialContact added (prsu100c/create/contact is now marked as DEPRECATED)
+			Schema version: 1.0 Date: 2012-06-20 Author: eda.development
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/person" schemaLocation="person.xsd" />
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/notary" schemaLocation="notary.xsd" />
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="enterprise.xsd" />
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/submittal" schemaLocation="submittal.xsd" />
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/address" schemaLocation="address.xsd" />
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/common/isocodes" schemaLocation="isocodes.xsd" />
+
+	
+	
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">The general form of an enterprise used for creation in the KBO/BCE.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="create">
+		<xs:sequence>
+			<xs:element ref="ent:juridical_district" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The juridical district of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:juridical_form">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: The juridical form of the enterprise. A foreign enterprise who is opening a branch has a juridical form 030</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:foreign_juridical_form" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: the juridical form of the foreign enterprise in his country. Currently a free text. It is presented in the header of the abstracts published in Belgian Monitor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:name" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						V2.3: The name of the belgian enterprise to be created or the name of foreign enterprise who is opening a branch. One name per publication language (even if it is the same name)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="belgian_branches" type="ent:belgian_branches" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: Defines a sequence (array) of new belgian branche(s). It is optional.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+		
+<!-- V3.0			<xs:element name="contact" type="ent:contactType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">[DEPRECATED] Use official_contact instead.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+			<xs:element name="official_contact" type="ent:officialContactType" minOccurs="0" maxOccurs="2">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Official contact information of the enterprise consists of 0 to 2 data: max. 1 official email address and max. 1 official web site.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="official_address" type="adr:addressType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The official address of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+<!-- V3.0	
+			<xs:element name="belgian_branch_local_address" type="adr:belgian-addressType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						[V2.3 NEVER USED and DEPRECATED] Use belgian_branch instead
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+
+<!-- V3.0	
+			<xs:element ref="ent:financial_contribution" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The financial contribution of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+			<xs:element ref="ent:capital" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The capital of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The duration of the company (in years)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:exercise_end" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						End of the accounting year. V2.3: The field is now optional. Business rule: this field is mandatory, except if annual_assembly and begin_exceptional_exercise and end_exceptional_exercise are not filled.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:begin_exceptional_exercise" minOccurs="0" />
+			<xs:element ref="ent:end_exceptional_exercise" minOccurs="0" />
+			<xs:element ref="ent:annual_assembly" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The annual assembly (place date and time).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:function" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The optional functions for the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:powerOfRepresentationClauses" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V3.0: Powers of Representation Clauses that must be registered in Costa for a given enterprise number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+
+	</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">The general form of an enterprise used for creation in the KBO/BCE.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="createjustice">
+		<xs:sequence>
+			<xs:element ref="ent:juridical_district" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The juridical district of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:juridical_form">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: The juridical form of the enterprise. A foreign enterprise who is opening a branch has a juridical form 030</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ent:foreign_juridical_form" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: the juridical form of the foreign enterprise in his country. Currently a free text. It is presented in the header of the abstracts published in Belgian Monitor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element ref="ent:name" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						V2.3: The name of the belgian enterprise to be created or the name of foreign enterprise who is opening a branch. One name per publication language (even if it is the same name)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="belgian_branches" type="ent:belgian_branches_with_kbo_status" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">V2.3: Defines a sequence (array) of new belgian branche(s) created (incl. KBO status). It is optional.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+<!-- V3.0
+			<xs:element name="contact" type="ent:contactType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The official contact information of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+
+			<xs:element name="official_address" type="adr:addressType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The official address of the enterprise.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+<!-- V3.0
+			<xs:element name="belgian_branch_local_address" type="adr:belgian-addressType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						[V2.3 NEVER USED and DEPRECATED] Use belgian_branch instead
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:cit="http://fsb.belgium.be/edepot-v3/citizen"
+		   xmlns:not="http://fsb.belgium.be/edepot-v3/notary"
+		   xmlns:acc="http://fsb.belgium.be/edepot-v3/accountant"
+		   xmlns:ack="http://fsb.belgium.be/edepot-v3/acknowledgement"
+		   xmlns:sub="http://fsb.belgium.be/edepot-v3/submittal"
+		   xmlns:err="http://fsb.belgium.be/edepot-v3/error"
+		   targetNamespace="http://fsb.belgium.be/edepot-v3/prsu580c"
+		   elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Schema version: 3.1 Date: 2024-09-02 Author: Rudy Tedaldi/Philippe Delvaux - Onboarded 'Accountants'.
+			Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of
+			edepot-v2.
+			Schema version: 2 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+			Schema version: 1.0 RC1 Date: 2005-04-07 Author: Ignaz Wanders
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/notary" schemaLocation="common/notary.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/accountant" schemaLocation="common/accountant.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/citizen" schemaLocation="common/citizen.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/acknowledgement" schemaLocation="common/acknowledgement.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/submittal" schemaLocation="common/submittal.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/error" schemaLocation="common/error.xsd"/>
+	<xs:element name="prsu580c">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The PRSU-580C message. This message is sent by the MB/BS to the FSB in response to the PRSU-500C
+				message. The response is asynchronous, and contains an acknowledgement indicating
+				whether or not the MB/BS were successful in processing the PRSU-500C message. In case it was successful,
+				the publication data are sent. In case the processing by MB/SB was
+				unsuccessful, an error message may be passed along providing details of the error.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice>
+					<xs:element ref="not:notary"/>
+					<xs:element ref="acc:accountant"/>
+					<xs:element ref="cit:citizen"/>
+				</xs:choice>
+				<xs:element ref="sub:submittal_timestamp"/>
+				<xs:element name="acknowledgement" type="ack:acknowledgement"/>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element name="moniteur_ack" type="ack:acknowledgement"/>
+						<xs:element ref="sub:publication" maxOccurs="unbounded"/>
+					</xs:sequence>
+					<xs:element ref="err:errors"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:cit="http://fsb.belgium.be/edepot-v3/citizen"
+           xmlns:not="http://fsb.belgium.be/edepot-v3/notary"
+		   xmlns:acc="http://fsb.belgium.be/edepot-v3/accountant"
+		   xmlns:ack="http://fsb.belgium.be/edepot-v3/acknowledgement"
+           xmlns:sub="http://fsb.belgium.be/edepot-v3/submittal"
+		   xmlns:cre="http://fsb.belgium.be/edepot-v3/create"
+           xmlns:ent="http://fsb.belgium.be/edepot-v3/enterprise"
+		   xmlns:ver="http://fsb.belgium.be/edepot-v3/version"
+           targetNamespace="http://fsb.belgium.be/edepot-v3/prsu500c"
+		   elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+			Schema version: 3.1 Date: 2024-09-02 Author: Rudy Tedaldi/Philippe Delvaux - Onboarded 'Accountants'.
+			Schema version: 3.0 Date: 2022-09-22 Author: Davy Toch - Target namespace now edepot-v3 instead of
+            edepot-v2.
+            Schema version: 2.3 Date 2021-07 Author : Rudy Tedaldi - Create Belgian branches of foreign enterprise
+            Schema version: 2 Date: 2012-06-04 Author: Gokhan Coskun Changes since previous version: see RFC024
+            Schema version: 1.1 Date: 2005-07-25 Author: Ignaz Wanders
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/notary" schemaLocation="common/notary.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/accountant" schemaLocation="common/accountant.xsd"/>
+	<xs:import namespace="http://fsb.belgium.be/edepot-v3/citizen" schemaLocation="common/citizen.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/acknowledgement" schemaLocation="common/acknowledgement.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/enterprise" schemaLocation="common/enterprise.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/address" schemaLocation="common/address.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/submittal" schemaLocation="common/submittal.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/version" schemaLocation="common/version.xsd"/>
+    <xs:import namespace="http://fsb.belgium.be/edepot-v3/create" schemaLocation="common/create.xsd"/>
+    <xs:element name="prsu500c">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                The PRSU-500C message. This message is sent by the FSB to the Moniteur Belge/Belgisch Staatsblad and
+                contains the abstracts which are to be published.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ver:version"/>
+                <xs:choice>
+                    <xs:element ref="not:notary"/>
+					<xs:element ref="acc:accountant"/>
+					<xs:element ref="cit:citizen"/>
+                </xs:choice>
+
+                <xs:element name="foreign_enterprise_num" type="ent:enterprise_number" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">V2.3 KBO foreign enterprise number. Filled when opening a
+                            belgian branch for a foreign enterprise that already exists in KBO
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="existing_belgian_branches" type="ent:belgian_branches" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">Defines a sequence (array) of existing_belgian_branches. It can
+                            be optional.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="sub:submittal_timestamp"/>
+                <xs:element ref="sub:act_date"/>
+                <xs:element ref="sub:act_effectivity_date" minOccurs="0"/>
+                <xs:element ref="sub:act_nature"/>
+                <xs:element ref="sub:act_uid"/>
+                <xs:element ref="sub:submittal_data"/>
+                <xs:element ref="sub:abstracts"/>
+
+                <xs:element name="enterprise_num" type="ent:enterprise_number"/>
+                <xs:element name="new_foreign_enterprise" type="xs:boolean" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">V2.3: True if the foreign enterprise will be created by the
+                            workflow in KBO. False if the foreign enterprise already existed in KBO
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="acknowledgement" type="ack:acknowledgement"/>
+                <xs:element ref="sub:act_purpose"/>
+                <xs:element ref="sub:deposit"/>
+                <xs:element name="create" type="cre:createjustice"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
