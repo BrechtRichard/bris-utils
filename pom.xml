@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>2.7.18</version>
     </parent>
 
     <groupId>be.bosa.edepot</groupId>
@@ -15,8 +15,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -76,7 +76,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>21</release>
+                    <release>11</release>
 
                     <!-- add this also because IntelliJ ignores <release> causing wrong bytecode version being set -->
                     <source>${maven.compiler.source}</source>
@@ -120,15 +120,16 @@
 
     <repositories>
         <repository>
-            <id>eu-releases</id>
-            <name>eu releases</name>
-            <url>https://bis.tech.ec.europa.eu/repository/maven-releases</url>
-        </repository>
-        <repository>
             <id>central</id>
             <name>Central Repository</name>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
+        <repository>
+            <id>eu-releases</id>
+            <name>eu releases</name>
+            <url>https://bis.tech.ec.europa.eu/repository/maven-releases</url>
+        </repository>
+
     </repositories>
 
 </project>
